@@ -1,0 +1,28 @@
+# Secrets and tokens (ANTI-LEAK / REGLA 14)
+.secrets/
+*.json
+*.token
+*.key
+token.json
+credentials.json
+api_keys.json
+.env*
+
+# Mails and private data (No subir correos personales)
+_HISTORICO_MAIL/
+AGENT_INBOX/*.md
+!AGENT_INBOX/.gitkeep
+INBOX_CONSOLIDADO.md
+ENLACES_INTERESANTES_MAIL.md
+
+# Python cache & artifacts
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.log
+
+# Temporary builds and big zip files
+*.zip
+ENTREGABLE_ALUMNOS_BUILD/
