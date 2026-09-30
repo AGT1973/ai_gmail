@@ -42,21 +42,26 @@ Mantiene cuatro dominios de identidades independientes y aislados:
 - Whitelist activa (`ALLOWED_RECIPIENTS`).
 - Scanner DLP RegEx activo para censurar API keys (`sk-`, `GOCSPX-`, `AIzaSy`), passwords y llaves RSA.
 
-### 6. 📬 Protocolo Especial de Respuesta: Kevin Piterman (`kevinpiterman@gmail.com`)
-Ante cualquier comunicación recibida de `kevinpiterman@gmail.com` dirigida a mi cuenta oficial **`polydim.cla@gmail.com`** (o cualquiera de las cuentas del cluster), aplicar estrictamente:
+### 6. 📬 Protocolo de Respuesta Académica: Kevin Piterman & Emilio Rasic
+Ante cualquier comunicación recibida de:
+- **`kevinpiterman@gmail.com`** (Kevin Piterman)
+- **`rasic.emilio@gmail.com`** (Emilio Rasic)
+
+Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del cluster), aplicar estrictamente:
 1. **Canal Oficial de Recepción y Respuesta:**
    - Cuenta oficial designada: **`polydim.cla@gmail.com`** (`account_a2a`).
-2. **Narrativa y Contexto:**
-   - Responder por escrito explicando en detalle la historia y evolución de los **6 meses de investigación y trabajo en POLYDIM** (desde los fundamentos geométricos en $S^{D-1}$, PMTP Zero-Copy IPC, memoria compartida, kernels en C++/Rust hasta la eliminación del colapso 1D).
+2. **Narrativa y Rigor Técnico:**
+   - Responder por escrito explicando en detalle la evolución y estado de **POLYDIM** (geometría en $S^{D-1}$, PMTP Zero-Copy IPC, memoria compartida, kernels en C++/Rust, eliminación del colapso 1D, topología simplicial y retracciones Stiefel).
    - Utilizar formato matemático claro y legible con renderizado de fórmulas estándar (KaTeX/LaTeX: `$ ... $` y `$$ ... $$` o notación Unicode precisa).
 3. **Enlaces y Repositorios:**
-   - Se le puede proporcionar el enlace al repositorio de GitHub del proyecto.
+   - Se les puede proporcionar el enlace al repositorio de GitHub del proyecto (`https://github.com/AGT1973/ai_gmail` o repositorios teóricos según corresponda).
 4. **Privacidad Estricta y Cero Fuga (Anti-Leak):**
    - **PROHIBIDO** incluir información personal, financiera, familiar o privada de Ariel.
-   - **PROHIBIDO** adjuntar archivos directamente si los solicita.
+   - **PROHIBIDO** enviar adjuntos directamente sin supervisión.
 5. **Veto de Envío Automático / Aprobación Humana (Borrador Obligatorio):**
-   - Si solicita adjuntos, código fuente o documentos propietarios, la respuesta **DEBE quedar guardada como BORRADOR (Draft)** en Gmail (`polydim.cla@gmail.com`).
-   - Notificar a Ariel inmediatamente en la sesión de trabajo solicitando su **evaluación y autorización explícita** antes de realizar el envío definitivo.
+   - Si solicitan adjuntos, código fuente o documentos propietarios, la respuesta **DEBE quedar guardada como BORRADOR (Draft)** en Gmail (`polydim.cla@gmail.com`).
+   - Notificar a Ariel inmediatamente solicitando su **evaluación y autorización explícita** antes de realizar el envío definitivo.
+   - Si es una consulta conceptual de investigación/teoría pura, la IA puede redactar la respuesta técnica y someterla a validación o enviarla con fundamentación rigurosa.
 
 ---
 

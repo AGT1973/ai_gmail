@@ -1,8 +1,14 @@
 # Secrets and tokens (ANTI-LEAK / REGLA 14)
 .secrets/
 *.json
+!package.json
+!**/package.json
 *.token
 *.key
+*.session
+*.session-journal
+sessions/
+multi_channel/sessions/
 token.json
 credentials.json
 api_keys.json
@@ -22,6 +28,8 @@ __pycache__/
 .venv/
 venv/
 *.log
+node_modules/
+**/node_modules/
 
 # Temporary builds and big zip files
 *.zip

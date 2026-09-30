@@ -60,22 +60,37 @@ def react_to_email(sender: str, subject: str, body: str, vault: str, msg_id: str
             except Exception as e:
                 print(f"Error actualizando Ledger: {e}")
 
-    # 2. ¿Es Kevin Piterman?
-    if "kevinpiterman@gmail.com" in sender_lower:
-        print(f"🚨 [EVENT REACTOR] Correo de Kevin Piterman detectado: '{subject}'")
+    # 2. ¿Es Colaborador Académico Autorizado (Kevin Piterman / Emilio Rasic)?
+    ACADEMIC_COLLABORATORS = {
+        "kevinpiterman@gmail.com": "Kevin Piterman",
+        "rasic.emilio@gmail.com": "Emilio Rasic"
+    }
+
+    matched_academic = None
+    for email_addr, name in ACADEMIC_COLLABORATORS.items():
+        if email_addr in sender_lower:
+            matched_academic = (email_addr, name)
+            break
+
+    if matched_academic:
+        email_addr, name = matched_academic
+        print(f"🚨 [EVENT REACTOR] Correo Académico Autorizado ({name} <{email_addr}>): '{subject}'")
         if LEDGER_PATH.exists():
             try:
                 ledger = json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
-                ledger["alerta_p0_kevin"] = {
+                ledger["alerta_p0_academica"] = {
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "collaborator": name,
+                    "email": email_addr,
                     "subject": subject,
                     "msg_id": msg_id,
                     "vault": vault,
-                    "status": "PENDIENTE_RESPUESTA_BORRADOR"
+                    "status": "HABILITADO_RESPUESTA_TECNICA",
+                    "action_required": "Generar respuesta técnica rigurosa (KaTeX/POLYDIM) o borrador si solicita adjuntos"
                 }
                 LEDGER_PATH.write_text(json.dumps(ledger, indent=2), encoding="utf-8")
-                actions_taken.append("ALERTA_P0_KEVIN_REGISTERED")
+                actions_taken.append(f"ALERTA_P0_{name.upper().replace(' ', '_')}_REGISTERED")
             except Exception as e:
-                print(f"Error registrando alerta Kevin: {e}")
+                print(f"Error registrando alerta académica: {e}")
 
     return actions_taken
