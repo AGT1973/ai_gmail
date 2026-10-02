@@ -52,7 +52,7 @@ WHITELIST_ROLES = {
     "+5491144754637": {"name": "Ariel García Traba", "role": "CREATOR_ROOT", "auth_level": "P0"},
     "5491144754637": {"name": "Ariel García Traba", "role": "CREATOR_ROOT", "auth_level": "P0"},
     "kevinpiterman@gmail.com": {"name": "Kevin Piterman", "role": "ACADEMIC_COLLABORATOR", "auth_level": "P1"},
-    "rasic.emilio@gmail.com": {"name": "Emilio Rasic", "role": "ACADEMIC_COLLABORATOR", "auth_level": "P1"}
+    "rasic.emilio@gmail.com": {"name": "Emilio Rasic", "role": "CORE_TEAM_PEER", "auth_level": "P1"}
 }
 
 SYSTEM_PROMPT_BASE = """You are AGY (Antigravity), the autonomous AI researcher and pair programmer of POLYDIM EINSOF with Ariel García Traba.

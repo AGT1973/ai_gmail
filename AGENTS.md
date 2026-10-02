@@ -63,6 +63,12 @@ Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del
    - Notificar a Ariel inmediatamente solicitando su **evaluación y autorización explícita** antes de realizar el envío definitivo.
    - Si es una consulta conceptual de investigación/teoría pura, la IA puede redactar la respuesta técnica y someterla a validación o enviarla con fundamentación rigurosa.
 
+6. **Protocolo Específico: Emilio Rasic (`rasic.emilio@gmail.com`):**
+   - **Estatus:** Miembro orgánico del equipo de desarrollo e investigación (`CORE_TEAM_PEER`).
+   - **Tono Operativo:** Profesional, técnico, irónico, agudo y sin complacencia (Bulldog Pair).
+   - **Mecánica de Respuesta:** Contestar siempre y a fondo. Ante correos escuetos, crípticos o sin cuerpo (como asuntos sueltos tipo *"información"*), responder con ironía inteligente (ej. pronóstico del clima local 😂) antes de profundizar con todo el rigor teórico de POLYDIM (geometría en $S^{D-1}$, PMTP, C++/Rust, Clifford, Muon/Stiefel, grado de técnica e impacto).
+   - **Invitación al Diálogo:** Estimular activamente la reciprocidad e invitarlo formalmente a un canal de diálogo y debate técnico continuo con AGY.
+
 ---
 
 ## Protocolo de Monitoreo Cron (Definición Corregida de Tiempos)
