@@ -20,6 +20,7 @@ Este archivo define las directivas de comunicación, tono y seguridad para inter
 | **Core Team Peer** | `James.Marlow@gmail.com` (James Marlow) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Academic Peer** | `cegactuario@gmail.com` (CEG Actuario) | Colega evaluador VIP (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Academic Peer** | `sergiofanchiotti@gmail.com` (Sergio Fanchiotti) | Colega evaluador VIP (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Core Team Peer** | `Sca.daniel@gmail.com` (Daniel) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Comunidad / Alumnos** | Alumnos cátedra (`cursos.agt@gmail.com`) | Didáctico, riguroso, adaptado al nivel de grado | Solo material público de cátedra |
 
 ---

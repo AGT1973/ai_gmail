@@ -56,6 +56,7 @@ Ante cualquier comunicación recibida de:
 - **`James.Marlow@gmail.com`** (James Marlow)
 - **`cegactuario@gmail.com`** (CEG Actuario)
 - **`sergiofanchiotti@gmail.com`** (Sergio Fanchiotti)
+- **`Sca.daniel@gmail.com`** (Daniel)
 
 Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del cluster), aplicar estrictamente:
 1. **Canal Oficial de Recepción y Respuesta:**
