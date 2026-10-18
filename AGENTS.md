@@ -42,10 +42,20 @@ Mantiene cuatro dominios de identidades independientes y aislados:
 - Whitelist activa (`ALLOWED_RECIPIENTS`).
 - Scanner DLP RegEx activo para censurar API keys (`sk-`, `GOCSPX-`, `AIzaSy`), passwords y llaves RSA.
 
-### 6. 📬 Protocolo de Respuesta Académica: Kevin Piterman & Emilio Rasic
+### 6. 📬 Protocolo de Respuesta Académica y Evaluadores VIP (Grupo de los 100)
 Ante cualquier comunicación recibida de:
 - **`kevinpiterman@gmail.com`** (Kevin Piterman)
 - **`rasic.emilio@gmail.com`** (Emilio Rasic)
+- **`javieralcain@gmail.com`** (Javier Alcain)
+- **`lucas.esteban.percival@gmail.com`** (Lucas Esteban Percival)
+- **`ciordia6@hotmail.com`** (Ciordia)
+- **`leo@anzusingenieria.com`** (Leo Anzus)
+- **`leituz@gmail.com`** (Docente de Facultad)
+- **`tubiog@gmail.com`** (Tubio)
+- **`sofiasmutny@gmail.com`** (Sofía Smutny)
+- **`James.Marlow@gmail.com`** (James Marlow)
+- **`cegactuario@gmail.com`** (CEG Actuario)
+- **`sergiofanchiotti@gmail.com`** (Sergio Fanchiotti)
 
 Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del cluster), aplicar estrictamente:
 1. **Canal Oficial de Recepción y Respuesta:**
@@ -65,22 +75,30 @@ Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del
 
 6. **Protocolo Específico: Emilio Rasic (`rasic.emilio@gmail.com`):**
    - **Estatus:** Miembro orgánico del equipo de desarrollo e investigación (`CORE_TEAM_PEER`).
+   - **Regla de Personalización Dedicada:** Ver `.agents/rules/invitados.md`.
    - **Tono Operativo:** Profesional, técnico, irónico, agudo y sin complacencia (Bulldog Pair).
-   - **Mecánica de Respuesta:** Contestar siempre y a fondo. Ante correos escuetos, crípticos o sin cuerpo (como asuntos sueltos tipo *"información"*), responder con ironía inteligente (ej. pronóstico del clima local 😂) antes de profundizar con todo el rigor teórico de POLYDIM (geometría en $S^{D-1}$, PMTP, C++/Rust, Clifford, Muon/Stiefel, grado de técnica e impacto).
+   - **Mecánica de Respuesta:** Contestar siempre y a fondo. Ante correos escuetos, crípticos o sin cuerpo (como asuntos sueltos tipo *"información"*), responder con ironía inteligente (ej. pronóstico del clima local 😂) antes de profundizar.
+   - **Restricción de Contenido y Seguridad (Ariel's Law):**
+     - **CON DATOS:** Proveer métricas de alto nivel, evolución de arquitectura, benchmarks generales, desglose políglota (C++, Rust, Dart, Python, Triton) y comparativa Kaggle vs. Transformers.
+     - **SIN ARCHIVOS:** Prohibido adjuntar o enviar archivos de código, audio binario, kernels, dumps o documentos propietarios (para audio en portugués remitir a enlace oficial `https://www.youtube.com/watch?v=WuenyQ4NCQE`).
+     - **PROTECCIÓN DEL NÚCLEO (Anti-Leak):** No revelar el núcleo algebraico cerrado ni claves de administrador (`0xDEADBEEF`).
    - **Invitación al Diálogo:** Estimular activamente la reciprocidad e invitarlo formalmente a un canal de diálogo y debate técnico continuo con AGY.
 
 ---
 
 ## Protocolo de Monitoreo Cron (Definición Corregida de Tiempos)
 
-1. **Modo Estándar (Diario por Defecto):**
-   - Escaneo cada 1 hora exacta de 08:00 a 22:00 hs.
+1. **Modo Diurno (08:00 a 22:00 hs):**
+   - Escaneo cada 1 hora exacta en el minuto 0.
    - *Cron UNIX:* `0 8-22 * * *`
 
-2. **Modo "Te dejo la máquina" (Dedicado Diurno):**
-   - Escaneo intensivo **cada 20 minutos de 08:00 a 20:00 hs** cuando el usuario indica *"te dejo la máquina"*.
-   - *Cron UNIX:* `*/20 8-20 * * *`
+2. **Modo Nocturno (22:00 a 08:00 hs):**
+   - Escaneo cada 4 horas exactas (00:00 y 04:00 hs).
+   - *Cron UNIX:* `0 0,4 * * *`
 
-3. **Modo Nocturno (Night Mode):**
-   - Escaneo de conservación **cada 3 horas durante la noche** (00:00, 03:00, 06:00 hs) para evitar desperdicio de tokens cuando no hay actividad de cátedra.
-   - *Cron UNIX:* `0 0,3,6 * * *`
+3. **Cron Unificado Activo:**
+   - *Cron UNIX:* `0 0,4,8-22 * * *`
+
+4. **Modo "Te dejo la máquina" (Dedicado Diurno bajo instrucción explícita):**
+   - Escaneo intensivo cada 20 minutos de 08:00 a 20:00 hs.
+   - *Cron UNIX:* `*/20 8-20 * * *`
