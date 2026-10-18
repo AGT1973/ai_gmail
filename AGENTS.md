@@ -57,6 +57,9 @@ Ante cualquier comunicación recibida de:
 - **`cegactuario@gmail.com`** (CEG Actuario)
 - **`sergiofanchiotti@gmail.com`** (Sergio Fanchiotti)
 - **`Sca.daniel@gmail.com`** (Daniel)
+- **`Caro.Corradi@gmail.com`** (Caro Corradi)
+- **`virginiacarstairs@gmail.com`** (Virginia Carstairs)
+- **`latinokarina@gmail.com`** (Karina Latino)
 
 Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del cluster), aplicar estrictamente:
 1. **Canal Oficial de Recepción y Respuesta:**

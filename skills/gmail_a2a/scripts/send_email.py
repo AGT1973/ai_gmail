@@ -19,7 +19,23 @@ ALLOWED_RECIPIENTS = [
     "cursos.agt@gmail.com",
     "cursos.ai.agt@gmail.com",
     "polydim.cla@gmail.com",
-    "ai.mpat.designer@gmail.com"
+    "ai.mpat.designer@gmail.com",
+    "rasic.emilio@gmail.com",
+    "kevinpiterman@gmail.com",
+    "javieralcain@gmail.com",
+    "lucas.esteban.percival@gmail.com",
+    "ciordia6@hotmail.com",
+    "leo@anzusingenieria.com",
+    "leituz@gmail.com",
+    "tubiog@gmail.com",
+    "sofiasmutny@gmail.com",
+    "James.Marlow@gmail.com",
+    "cegactuario@gmail.com",
+    "sergiofanchiotti@gmail.com",
+    "Sca.daniel@gmail.com",
+    "Caro.Corradi@gmail.com",
+    "virginiacarstairs@gmail.com",
+    "latinokarina@gmail.com"
 ]
 
 # 🛡️ GUARDRAIL 2: Patrones DLP (Data Loss Prevention) - Anti-Leak de Claves y Passwords
