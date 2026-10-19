@@ -60,6 +60,7 @@ Ante cualquier comunicación recibida de:
 - **`Caro.Corradi@gmail.com`** (Caro Corradi)
 - **`virginiacarstairs@gmail.com`** (Virginia Carstairs)
 - **`latinokarina@gmail.com`** (Karina Latino)
+- **`mdelrrodriguez@gmail.com`** (Rodríguez)
 
 Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del cluster), aplicar estrictamente:
 1. **Canal Oficial de Recepción y Respuesta:**

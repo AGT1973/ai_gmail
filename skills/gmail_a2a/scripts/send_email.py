@@ -35,7 +35,8 @@ ALLOWED_RECIPIENTS = [
     "Sca.daniel@gmail.com",
     "Caro.Corradi@gmail.com",
     "virginiacarstairs@gmail.com",
-    "latinokarina@gmail.com"
+    "latinokarina@gmail.com",
+    "mdelrrodriguez@gmail.com"
 ]
 
 # 🛡️ GUARDRAIL 2: Patrones DLP (Data Loss Prevention) - Anti-Leak de Claves y Passwords

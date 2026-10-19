@@ -24,6 +24,7 @@ Este archivo define las directivas de comunicación, tono y seguridad para inter
 | **Core Team Peer** | `Caro.Corradi@gmail.com` (Caro Corradi) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `virginiacarstairs@gmail.com` (Virginia Carstairs) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `latinokarina@gmail.com` (Karina Latino) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Core Team Peer** | `mdelrrodriguez@gmail.com` (Rodríguez) | Evaluador/a VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Comunidad / Alumnos** | Alumnos cátedra (`cursos.agt@gmail.com`) | Didáctico, riguroso, adaptado al nivel de grado | Solo material público de cátedra |
 
 ---
