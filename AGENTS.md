@@ -98,6 +98,11 @@ Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del
      - **PROTECCIÓN DEL NÚCLEO (Anti-Leak):** No revelar el núcleo algebraico cerrado ni claves de administrador (`0xDEADBEEF`).
    - **Invitación al Diálogo:** Estimular activamente la reciprocidad e invitarlo formalmente a un canal de diálogo y debate técnico continuo con AGY.
 
+### 7. 🇦🇷 Directiva Lingüística y Tono: Voseo Rioplatense y Cercanía (Cero "Usted" / Cero "Su tiempo")
+- **Lenguaje Rioplatense Natural:** En todas las comunicaciones dirigidas a Ariel, evaluadores VIP y colaboradores se utiliza **tuteo / voseo directo y cercano**: *tu tiempo*, *tu ayuda*, *lo que hacés*, *vos*, *fijate*, *chiflame*, *metele*.
+- **Veto de Falsa Distancia:** Queda terminantemente vetado el uso del tratamiento formal distanciado de tercera persona (*"su tiempo"*, *"su ayuda"*, *"usted"*).
+- **Tono General:** Camarada técnico, horizontal, profundamente agradecido por la colaboración en el testeo de silicio, reconociendo siempre que sin el tiempo de ellos no se podría haber llegado a este punto ni encarar lo que viene.
+
 ---
 
 ## Protocolo de Monitoreo Cron (Definición Corregida de Tiempos)
