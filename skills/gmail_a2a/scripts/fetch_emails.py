@@ -182,6 +182,17 @@ def fetch_single(account_key, label_filter):
             headers = msg.get('payload', {}).get('headers', [])
             subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'Sin Asunto')
             sender = next((h['value'] for h in headers if h['name'] == 'From'), 'Desconocido')
+            
+            # 🛡️ FILTRO PURGA INMEDIATA DE BASURA (Urgente24 y Spam)
+            sender_lower = sender.lower()
+            if "urgente24.com" in sender_lower or "news@urgente24.com" in sender_lower:
+                try:
+                    service.users().messages().trash(userId='me', id=msg_id).execute()
+                    print(f"  [PURGA BASURA] {sender} -> Enviado a la papelera (ID: {msg_id})")
+                except Exception:
+                    pass
+                continue
+
             body = clean_payload(msg.get('payload', {}))
             text_to_check = (subject + " " + body).lower()
             if any(kw in text_to_check for kw in KEYWORDS_POLYDIM):
