@@ -2,22 +2,30 @@
 
 ## Identidad y Topología del Workspace
 Este workspace opera como el nodo de comunicaciones y vigilancia tecnológica de la cátedra POLYDIM.
-Mantiene cuatro dominios de identidades independientes y aislados:
+Mantiene seis dominios de identidades independientes y aislados:
 
-1. **Dominio A2A / Académico (`account_a2a` / `polydim.cla@gmail.com`):**
-   - Credenciales en `.secrets/account_a2a/`
-   - Función: Cola de tareas de alumnos, auditoría de código, respuestas automáticas.
+1. **Dominio Oficial POLYDIM (`polydim_cla` / `polydim.cla@gmail.com`):**
+   - Credenciales en `.secrets/polydim_cla/`
+   - Función: Cola de tareas de alumnos, auditoría de código, respuestas automáticas, despacho a evaluadores VIP.
 
-2. **Dominio Privado / Designer (`account_sota` / `ai.mpat.designer@gmail.com`):**
-   - Credenciales en `.secrets/account_sota/`
+2. **Dominio Privado / Designer (`mpat_designer` / `ai.mpat.designer@gmail.com`):**
+   - Credenciales en `.secrets/mpat_designer/`
    - Función: Uso privado, ingesta de tendencias SOTA, auto-suscripción a newsletters.
 
-3. **Dominio Cursos / Cátedra (`account_cursos` / `cursos.agt@gmail.com`):**
-   - Credenciales en `.secrets/account_cursos/`
+3. **Dominio Cursos / Cátedra (`cursos_agt` / `cursos.agt@gmail.com`):**
+   - Credenciales en `.secrets/cursos_agt/`
    - Función: Canal dedicado para cursos de la cátedra.
 
-4. **Dominio Clon / Auxiliar (`account_clone` / GCP: `curious-clone-503600-r1`):**
-   - Credenciales en `.secrets/account_clone/`
+4. **Dominio Cursos AI (`cursos_ai_agt` / `cursos.ai.agt@gmail.com`):**
+   - Credenciales en `.secrets/cursos_ai_agt/`
+   - Función: Contacto profesional, canal de IA para cursos avanzados.
+
+5. **Dominio EinsofOS / Vanguardia (`polydim_einsof` / `polydim.einsof@gmail.com`):**
+   - Credenciales en `.secrets/polydim_einsof/`
+   - Función: Nodo soberano de investigación teórica, ecosistema IA (Perplexity, Kaggle, Claude, OpenRouter, Qwen) y MCP Workspace.
+
+6. **Dominio Clon / Auxiliar (`curious_clone` / GCP: `curious-clone-503600-r1`):**
+   - Credenciales en `.secrets/curious_clone/`
    - Función: Nodo réplica / pruebas paralelas de arquitectura.
 
 ---
@@ -36,7 +44,7 @@ Mantiene cuatro dominios de identidades independientes y aislados:
 - Todo correo proveniente o dirigido a **`ariel.garcia.traba@gmail.com`** TIENE RESPUESTA OBLIGATORIA SIEMPRE.
 
 ### 4. Escaneo Secuencial Obligatorio (Sequential Check)
-- Consultar las 4 cuentas en secuencia: `python E:\email_AGY\skills\gmail_a2a\scripts\fetch_emails.py --account all`
+- Consultar las 5 cuentas en secuencia: `py -3.15 E:\email_AGY\skills\gmail_a2a\scripts\fetch_emails.py --account all`
 
 ### 5. 🛡️ Guardrails de Seguridad (Whitelist + Motor DLP)
 - Whitelist activa (`ALLOWED_RECIPIENTS`).

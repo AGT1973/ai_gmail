@@ -14,13 +14,24 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
 
 ACCOUNT_MAP = {
-    "account_a2a": "account_a2a",
-    "account_sota": "account_sota",
-    "account_cursos": "account_cursos",
-    "cursos.agt@gmail.com": "account_cursos",
-    "cursos.ai.agt@gmail.com": "account_a2a",
-    "polydim.cla@gmail.com": "account_a2a",
-    "ai.mpat.designer@gmail.com": "account_sota"
+    # Canonical directory names
+    "polydim_cla": "polydim_cla",
+    "mpat_designer": "mpat_designer",
+    "cursos_agt": "cursos_agt",
+    "cursos_ai_agt": "cursos_ai_agt",
+    "polydim_einsof": "polydim_einsof",
+    # Legacy aliases
+    "account_a2a": "polydim_cla",
+    "account_sota": "mpat_designer",
+    "account_cursos": "cursos_agt",
+    "account_cursos_ai": "cursos_ai_agt",
+    "account_einsof": "polydim_einsof",
+    # Email-based resolution
+    "cursos.agt@gmail.com": "cursos_agt",
+    "cursos.ai.agt@gmail.com": "cursos_ai_agt",
+    "polydim.cla@gmail.com": "polydim_cla",
+    "ai.mpat.designer@gmail.com": "mpat_designer",
+    "polydim.einsof@gmail.com": "polydim_einsof"
 }
 
 def extract_urls(text):

@@ -14,32 +14,107 @@ WORKSPACE_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
 SOTA_DIR = os.path.join(WORKSPACE_ROOT, "DOCUMENTACION", "SOTA")
 
 ACCOUNT_MAP = {
-    "account_a2a": "account_a2a",
-    "account_sota": "account_sota",
-    "account_cursos": "account_cursos",
-    "account_clone": "account_clone",
-    "curious-clone-503600-r1": "account_clone",
-    "cursos.agt@gmail.com": "account_cursos",
-    "cursos.ai.agt@gmail.com": "account_a2a",
-    "polydim.cla@gmail.com": "account_a2a",
-    "ai.mpat.designer@gmail.com": "account_sota"
+    # Canonical directory names (human-readable)
+    "polydim_cla": "polydim_cla",
+    "mpat_designer": "mpat_designer",
+    "cursos_agt": "cursos_agt",
+    "curious_clone": "curious_clone",
+    "cursos_ai_agt": "cursos_ai_agt",
+    "polydim_einsof": "polydim_einsof",
+    # Legacy aliases (backward compatibility)
+    "account_a2a": "polydim_cla",
+    "account_sota": "mpat_designer",
+    "account_cursos": "cursos_agt",
+    "account_clone": "curious_clone",
+    "account_cursos_ai": "cursos_ai_agt",
+    "account_einsof": "polydim_einsof",
+    # Email-based resolution
+    "curious-clone-503600-r1": "curious_clone",
+    "cursos.agt@gmail.com": "cursos_agt",
+    "cursos.ai.agt@gmail.com": "cursos_ai_agt",
+    "polydim.cla@gmail.com": "polydim_cla",
+    "ai.mpat.designer@gmail.com": "mpat_designer",
+    "polydim.einsof@gmail.com": "polydim_einsof"
 }
 
 KEYWORDS_POLYDIM = [
     "vector", "embedding", "hnsw", "clifford", "tda", "manifold", 
     "attention", "sparse", "rag", "tensor", "isometry", "hodge",
-    "dimension", "topology", "smiles", "molecule", "botnet", "llm"
+    "dimension", "topology", "smiles", "molecule", "botnet", "llm",
+    "agent", "agentic", "curriculum", "stiefel", "mimo", "deepseek", "qwen", "glm",
+    "lora", "optimizer", "adamw", "dimuon", "sft", "fine-tuning", "finetuning",
+    "quantization", "fp8", "moe", "reasoning", "speculative", "thinking machines",
+    "tinker", "ollama", "perplexity", "anthropic", "claude", "openai", "kaggle"
 ]
+
+GUEST_CLASSIFICATION = {
+    "ariel.garcia.traba@gmail.com": {
+        "type": "VIP_ARIEL",
+        "rule": "Respuesta obligatoria e inmediata siempre (Regla 3)."
+    },
+    "rasic.emilio@gmail.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Bulldog Pair, rigor técnico, ironía fina, sin archivos, YouTube link para audio PT (.agents/rules/invitados.md)."
+    },
+    "javieralcain@gmail.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "lucas.esteban.percival@gmail.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "ciordia6@hotmail.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "leo@anzusingenieria.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Evaluador VIP clave (Grupo de los 100 - Anzus Ingeniería). Rigor técnico, pack silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "kevinpiterman@gmail.com": {
+        "type": "ACADEMIC_PEER",
+        "rule": "Rigor académico formal, borrador previo para aprobación (.agents/rules/invitados.md)."
+    },
+    "leituz@gmail.com": {
+        "type": "ACADEMIC_PEER",
+        "rule": "Docente universitario / Evaluador clave (Grupo de los 100). Rigor académico formal, pack silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "tubiog@gmail.com": {
+        "type": "CORE_TEAM_PEER",
+        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor técnico, pack silicio, Colab 1-clic y privacidad 100% local."
+    },
+    "cursos.agt@gmail.com": {
+        "type": "ALUMNOS_CATEDRA",
+        "rule": "Atención didáctica para consultas de cursos."
+    }
+}
+
+def classify_sender(sender_str):
+    sender_clean = sender_str.lower()
+    for email_key, info in GUEST_CLASSIFICATION.items():
+        if email_key in sender_clean:
+            return info["type"], info["rule"]
+    return "EXTERNAL_OR_GENERAL", "Procesamiento general SOTA / Standard"
+
 
 def clean_payload(payload):
     if 'parts' in payload:
+        plain_accum = []
         for part in payload['parts']:
-            if part['mimeType'] == 'text/plain':
-                data = part['body'].get('data', '')
-                return base64.urlsafe_b64decode(data).decode('utf-8')
+            sub = clean_payload(part)
+            if sub:
+                plain_accum.append(sub)
+        if plain_accum:
+            return "\n".join(plain_accum)
     elif payload.get('mimeType') == 'text/plain':
-        data = payload['body'].get('data', '')
-        return base64.urlsafe_b64decode(data).decode('utf-8')
+        data = payload.get('body', {}).get('data', '')
+        if data:
+            return base64.urlsafe_b64decode(data).decode('utf-8', errors='replace')
+    elif payload.get('mimeType') == 'text/html':
+        data = payload.get('body', {}).get('data', '')
+        if data:
+            return base64.urlsafe_b64decode(data).decode('utf-8', errors='replace')
     return ""
 
 def safe_filename(text):
@@ -49,6 +124,11 @@ def safe_filename(text):
 def save_sota_ingestion(account_key, msg_id, sender, subject, body):
     if not os.path.exists(SOTA_DIR):
         os.makedirs(SOTA_DIR, exist_ok=True)
+
+    # Evitar duplicados si ya fue persistido por ID de mensaje
+    for existing in os.listdir(SOTA_DIR):
+        if f"_{msg_id}_" in existing:
+            return
 
     date_str = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name = f"SOTA_{date_str}_{msg_id}_{safe_filename(subject)}.md"
@@ -79,12 +159,20 @@ def fetch_single(account_key, label_filter):
     secrets_dir = os.path.join(WORKSPACE_ROOT, ".secrets", target_vault)
     token_file = os.path.join(secrets_dir, "token.json")
     if not os.path.exists(token_file):
+        print(f"  [CRITICAL AUTH] Cuenta [{target_vault}] SIN TOKEN: No existe {token_file}. Requiere autorización OAuth.")
         return []
-    creds = Credentials.from_authorized_user_file(token_file, SCOPES)
-    service = build('gmail', 'v1', credentials=creds)
+    try:
+        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+        service = build('gmail', 'v1', credentials=creds)
 
-    results = service.users().messages().list(userId='me', labelIds=label_filter).execute()
-    messages = results.get('messages', [])
+        results = service.users().messages().list(userId='me', labelIds=label_filter).execute()
+        messages = results.get('messages', [])
+        if target_vault == 'account_sota' and not messages:
+            recent_res = service.users().messages().list(userId='me', labelIds=['INBOX'], maxResults=10).execute()
+            messages = recent_res.get('messages', [])
+    except Exception as e:
+        print(f"  [CRITICAL AUTH] Cuenta [{target_vault}] ERROR DE TOKEN/ACCESO: {e}")
+        return []
 
     emails = []
     for msg_pointer in messages:
@@ -98,7 +186,20 @@ def fetch_single(account_key, label_filter):
             text_to_check = (subject + " " + body).lower()
             if any(kw in text_to_check for kw in KEYWORDS_POLYDIM):
                 save_sota_ingestion(target_vault, msg_id, sender, subject, body)
-            emails.append({"account": target_vault, "id": msg_id, "sender": sender, "subject": subject, "body": body})
+            
+            sender_type, rule_applied = classify_sender(sender)
+            if sender_type != "EXTERNAL_OR_GENERAL":
+                print(f"  [DETECCIÓN AUTOMÁTICA] Remitente: {sender} -> TIPO: {sender_type} | Regla: {rule_applied}")
+
+            emails.append({
+                "account": target_vault, 
+                "id": msg_id, 
+                "sender": sender, 
+                "sender_type": sender_type,
+                "rule_applied": rule_applied,
+                "subject": subject, 
+                "body": body
+            })
             if 'UNREAD' in msg.get('labelIds', []):
                 service.users().messages().modify(userId='me', id=msg_id, body={'removeLabelIds': ['UNREAD']}).execute()
         except Exception as e:
@@ -112,7 +213,7 @@ def fetch_all(account_key="all", include_read=False):
     If include_read is True, fetch all inbox messages; otherwise only unread.
     """
     label_filter = ['INBOX'] if include_read else ['INBOX', 'UNREAD']
-    accounts_to_check = ["account_a2a", "account_sota", "account_cursos_ai", "account_clone"] if account_key == "all" else [account_key]
+    accounts_to_check = ["polydim_cla", "mpat_designer", "polydim_einsof", "cursos_agt", "cursos_ai_agt", "curious_clone"] if account_key == "all" else [account_key]
     all_emails = []
     for acc in accounts_to_check:
         all_emails.extend(fetch_single(acc, label_filter))

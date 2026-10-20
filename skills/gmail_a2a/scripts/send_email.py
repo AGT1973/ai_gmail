@@ -37,7 +37,8 @@ ALLOWED_RECIPIENTS = [
     "Caro.Corradi@gmail.com",
     "virginiacarstairs@gmail.com",
     "latinokarina@gmail.com",
-    "mdelrrodriguez@gmail.com"
+    "mdelrrodriguez@gmail.com",
+    "polydim.einsof@gmail.com"
 ]
 
 # 🛡️ GUARDRAIL 2: Patrones DLP (Data Loss Prevention) - Anti-Leak de Claves y Passwords
@@ -51,14 +52,25 @@ PATRONES_DLP = [
 ]
 
 ACCOUNT_MAP = {
-    "account_a2a": "account_a2a",
-    "account_sota": "account_sota",
-    "account_cursos": "account_cursos",
-    "cursos.agt@gmail.com": "account_cursos",
-    "cursos.ai.agt@gmail.com": "account_a2a",
-    "polydim.cla@gmail.com": "account_a2a",
-    "ai.mpat.designer@gmail.com": "account_sota",
-    "ariel.garcia.traba@gmail.com": "account_a2a"
+    # Canonical directory names (human-readable)
+    "polydim_cla": "polydim_cla",
+    "mpat_designer": "mpat_designer",
+    "cursos_agt": "cursos_agt",
+    "cursos_ai_agt": "cursos_ai_agt",
+    "polydim_einsof": "polydim_einsof",
+    # Legacy aliases (backward compatibility)
+    "account_a2a": "polydim_cla",
+    "account_sota": "mpat_designer",
+    "account_cursos": "cursos_agt",
+    "account_cursos_ai": "cursos_ai_agt",
+    "account_einsof": "polydim_einsof",
+    # Email-based resolution
+    "cursos.agt@gmail.com": "cursos_agt",
+    "cursos.ai.agt@gmail.com": "cursos_ai_agt",
+    "polydim.cla@gmail.com": "polydim_cla",
+    "ai.mpat.designer@gmail.com": "mpat_designer",
+    "polydim.einsof@gmail.com": "polydim_einsof",
+    "ariel.garcia.traba@gmail.com": "polydim_cla"
 }
 
 def sanitize_content(text):
