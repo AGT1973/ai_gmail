@@ -14,13 +14,14 @@ Este archivo define las directivas de comunicación, tono y seguridad para inter
 | **Core Team Peer** | `ciordia6@hotmail.com` (Ciordia) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `leo@anzusingenieria.com` (Leo Anzus) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Academic Peer** | `kevinpiterman@gmail.com` (Kevin Piterman) | Formal académico, matemático, riguroso, pedagógico | **CON DATOS / BORRADOR PREVIO** |
-| **Academic Peer** | `leituz@gmail.com` (Docente de Facultad) | Colega docente universitario (Grupo de los 100): Rigor académico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Academic Peer** | `leituz@gmail.com` (Leituz Roxana) | Colega docente universitaria (Grupo de los 100): Rigor académico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `tubiog@gmail.com` (Tubio) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `sofiasmutny@gmail.com` (Sofía Smutny) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `James.Marlow@gmail.com` (James Marlow) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
-| **Academic Peer** | `cegactuario@gmail.com` (CEG Actuario) | Colega evaluador VIP (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Academic Peer** | `cegactuario@gmail.com` (Carlos Gil) | Colega evaluador VIP (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Academic Peer** | `sergiofanchiotti@gmail.com` (Sergio Fanchiotti) | Colega evaluador VIP (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
-| **Core Team Peer** | `Sca.daniel@gmail.com` (Daniel) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Core Team Peer** | `sca.automatizaciones@gmail.com` (Daniel) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
+| **Core Team Peer** | `rafalore@gmail.com` (Rafael) | Evaluador VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `Caro.Corradi@gmail.com` (Caro Corradi) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `virginiacarstairs@gmail.com` (Virginia Carstairs) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
 | **Core Team Peer** | `latinokarina@gmail.com` (Karina Latino) | Evaluadora VIP clave (Grupo de los 100): Rigor técnico, pack silicio, Colab 1-clic | **CON DATOS / SIN ARCHIVOS** (Anti-Leak estricto) |
