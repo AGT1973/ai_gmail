@@ -38,7 +38,8 @@ ALLOWED_RECIPIENTS = [
     "virginiacarstairs@gmail.com",
     "latinokarina@gmail.com",
     "mdelrrodriguez@gmail.com",
-    "polydim.einsof@gmail.com"
+    "polydim.einsof@gmail.com",
+    "queimam@hotmail.com"
 ]
 
 # 🛡️ GUARDRAIL 2: Patrones DLP (Data Loss Prevention) - Anti-Leak de Claves y Passwords
@@ -84,7 +85,7 @@ def sanitize_content(text):
 
 def send_reply(to_email, subject, body, account_key="account_a2a"):
     to_email_clean = to_email.strip().lower()
-    if not any(target in to_email_clean for target in ALLOWED_RECIPIENTS):
+    if not any(target.lower() in to_email_clean for target in ALLOWED_RECIPIENTS):
         print(f"SECURITY VETO: El destinatario '{to_email}' NO está en la lista blanca autorizada. Envío abortado.")
         sys.exit(1)
 

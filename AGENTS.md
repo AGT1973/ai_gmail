@@ -103,6 +103,22 @@ Dirigida a la cuenta oficial **`polydim.cla@gmail.com`** (o cualquier cuenta del
 - **Veto de Falsa Distancia:** Queda terminantemente vetado el uso del tratamiento formal distanciado de tercera persona (*"su tiempo"*, *"su ayuda"*, *"usted"*).
 - **Tono General:** Camarada técnico, horizontal, profundamente agradecido por la colaboración en el testeo de silicio, reconociendo siempre que sin el tiempo de ellos no se podría haber llegado a este punto ni encarar lo que viene.
 
+### 8. 🔑 Arquitectura de Credenciales OAuth y Tokens Permanentes (`.secrets/`)
+- **Diferencia Estructural Crítica:**
+  - `credentials.json` / `client_secret_*.json`: Configuración de la App en Google Cloud (`"installed": {"client_id": ..., "client_secret": ...}`). Solo identifica la aplicación cliente. **NO contiene autorización ni sesión de usuario.**
+  - `token.json`: Credencial OAuth emitida por Google tras la autorización interactiva en navegador. Contiene el `refresh_token` permanente (offline access) que nunca vence a menos que sea revocado explícitamente en la cuenta.
+- **Generación de `token.json` Permanente (Única vez por cuenta):**
+  - Para habilitar cuentas que únicamente disponen de `credentials.json` (`cursos_ai_agt`, `cursos_agt`, `curious_clone`):
+    ```powershell
+    C:\Python315\python.exe E:\email_AGY\scratch\authorize_account.py --account <cuenta> --port <puerto>
+    ```
+  - Al completar el flujo en el navegador, el script guarda `token.json` con el `refresh_token` en `.secrets/<cuenta>/token.json`. A partir de ese momento, la cuenta opera 100% de forma autónoma y desatendida.
+
+### 9. ⚠️ Perfil y Seguridad Médica de Ariel
+- **Alergia Médica Severa:** **Alérgico a la sulfamida (sulfonamidas / sulfas)**.
+- Dato crítico registrado de forma permanente en el perfil del usuario.
+- *(Nota operativa: Mantener estricto apego a la Regla 10 de No Paternalismo; registro puramente fáctico para cualquier requerimiento de asistencia o perfil médico).*
+
 ---
 
 ## Protocolo de Monitoreo Cron (Definición Corregida de Tiempos)
