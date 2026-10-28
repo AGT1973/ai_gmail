@@ -14,12 +14,40 @@ credentials.json
 api_keys.json
 .env*
 
-# Mails and private data (No subir correos personales)
+# Mails and private data (No subir correos ni agentes a GitHub)
+AGENTS.md
+.agents/
+DOCUMENTACION/SOTA/
+DOCUMENTACION/*.json
+DOCUMENTACION/drive_access_granted_log.json
+DOCUMENTACION/*.png
+DOCUMENTACION/*.jpg
+skills/gmail_a2a/
+polydim_mail_cron.py
+auth_setup.py
+MANUAL_antigravity_Gmail.md
+send_*.py
+create_*.py
+check_*.py
+read_*.py
+search_*.py
+update_*.py
+inspect_*.py
+test_*.py
+list_drafts.py
+fix_*.py
+polydim_flask_dashboard.py
+build_*_colab.py
+kit_evaluacion_*.py
+scratch/
+scripts/
+utils/
+multi_channel/
 _HISTORICO_MAIL/
-AGENT_INBOX/*.md
-!AGENT_INBOX/.gitkeep
+AGENT_INBOX/
 INBOX_CONSOLIDADO.md
 ENLACES_INTERESANTES_MAIL.md
+MENSAJE_WHATSAPP_*.txt
 
 # Python cache & artifacts
 __pycache__/
@@ -38,5 +66,4 @@ ENTREGABLE_ALUMNOS_BUILD/
 # Large binaries
 OllamaSetup.exe
 *.exe
-
 *.mp4
