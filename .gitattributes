@@ -1,0 +1,20 @@
+# ==============================================================================
+# GitHub Linguist Configuration - POLYDIM-EINSOF Architecture
+# ==============================================================================
+
+# Exclude bloated Jupyter Notebook JSON from language statistics
+*.ipynb linguist-documentation=true
+*.ipynb linguist-detectable=false
+
+# Exclude generated/test datasets and HTML benchmarks
+*.html linguist-documentation=true
+*.json linguist-documentation=true
+DOCUMENTOS_MAESTROS/* linguist-documentation=true
+
+# Enforce detection of Native Silicon Kernels
+pmtp/*.cpp linguist-language=C++
+pmtp/*.h linguist-language=C++
+pmtp/*.rs linguist-language=Rust
+pmtp/*.cu linguist-language=Cuda
+pmtp/*.dart linguist-language=Dart
+pmtp/*.py linguist-language=Python
