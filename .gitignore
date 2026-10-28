@@ -34,3 +34,9 @@ node_modules/
 # Temporary builds and big zip files
 *.zip
 ENTREGABLE_ALUMNOS_BUILD/
+
+# Large binaries
+OllamaSetup.exe
+*.exe
+
+*.mp4

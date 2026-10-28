@@ -18,18 +18,15 @@ ACCOUNT_MAP = {
     "polydim_cla": "polydim_cla",
     "mpat_designer": "mpat_designer",
     "cursos_agt": "cursos_agt",
-    "curious_clone": "curious_clone",
     "cursos_ai_agt": "cursos_ai_agt",
     "polydim_einsof": "polydim_einsof",
     # Legacy aliases (backward compatibility)
     "account_a2a": "polydim_cla",
     "account_sota": "mpat_designer",
     "account_cursos": "cursos_agt",
-    "account_clone": "curious_clone",
     "account_cursos_ai": "cursos_ai_agt",
     "account_einsof": "polydim_einsof",
     # Email-based resolution
-    "curious-clone-503600-r1": "curious_clone",
     "cursos.agt@gmail.com": "cursos_agt",
     "cursos.ai.agt@gmail.com": "cursos_ai_agt",
     "polydim.cla@gmail.com": "polydim_cla",
@@ -54,39 +51,39 @@ GUEST_CLASSIFICATION = {
     },
     "rasic.emilio@gmail.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Bulldog Pair, rigor técnico, ironía fina, sin archivos, YouTube link para audio PT (.agents/rules/invitados.md)."
+        "rule": "Bulldog Pair, rigor tÃ©cnico, ironÃ­a fina, sin archivos, YouTube link para audio PT (.agents/rules/invitados.md)."
     },
     "javieralcain@gmail.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor tÃ©cnico, pack de evaluaciÃ³n silicio, Colab 1-clic y privacidad 100% local."
     },
     "lucas.esteban.percival@gmail.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Evaluador VIP clave junto a Emilio Rasic. Rigor tÃ©cnico, pack de evaluaciÃ³n silicio, Colab 1-clic y privacidad 100% local."
     },
     "ciordia6@hotmail.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor técnico, pack de evaluación silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor tÃ©cnico, pack de evaluaciÃ³n silicio, Colab 1-clic y privacidad 100% local."
     },
     "leo@anzusingenieria.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Evaluador VIP clave (Grupo de los 100 - Anzus Ingeniería). Rigor técnico, pack silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Evaluador VIP clave (Grupo de los 100 - Anzus IngenierÃ­a). Rigor tÃ©cnico, pack silicio, Colab 1-clic y privacidad 100% local."
     },
     "kevinpiterman@gmail.com": {
         "type": "ACADEMIC_PEER",
-        "rule": "Rigor académico formal, borrador previo para aprobación (.agents/rules/invitados.md)."
+        "rule": "Rigor acadÃ©mico formal, borrador previo para aprobaciÃ³n (.agents/rules/invitados.md)."
     },
     "leituz@gmail.com": {
         "type": "ACADEMIC_PEER",
-        "rule": "Docente universitario / Evaluador clave (Grupo de los 100). Rigor académico formal, pack silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Docente universitario / Evaluador clave (Grupo de los 100). Rigor acadÃ©mico formal, pack silicio, Colab 1-clic y privacidad 100% local."
     },
     "tubiog@gmail.com": {
         "type": "CORE_TEAM_PEER",
-        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor técnico, pack silicio, Colab 1-clic y privacidad 100% local."
+        "rule": "Evaluador VIP clave (Grupo de los 100). Rigor tÃ©cnico, pack silicio, Colab 1-clic y privacidad 100% local."
     },
     "cursos.agt@gmail.com": {
         "type": "ALUMNOS_CATEDRA",
-        "rule": "Atención didáctica para consultas de cursos."
+        "rule": "AtenciÃ³n didÃ¡ctica para consultas de cursos."
     }
 }
 
@@ -134,7 +131,7 @@ def save_sota_ingestion(account_key, msg_id, sender, subject, body):
     file_name = f"SOTA_{date_str}_{msg_id}_{safe_filename(subject)}.md"
     file_path = os.path.join(SOTA_DIR, file_name)
 
-    content = f"""# 🧠 INGESTA TÉCNICA SOTA — PROYECTO POLYDIM
+    content = f"""# ðŸ§  INGESTA TÃ‰CNICA SOTA â€” PROYECTO POLYDIM
 **Fecha de Ingesta:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 **Cuenta Origen:** {account_key}
 **Remitente:** {sender}
@@ -143,7 +140,7 @@ def save_sota_ingestion(account_key, msg_id, sender, subject, body):
 
 ---
 
-## 📄 PAYLOAD TÉCNICO COMPLETO:
+## ðŸ“„ PAYLOAD TÃ‰CNICO COMPLETO:
 {body}
 """
     with open(file_path, "w", encoding="utf-8") as f:
@@ -159,7 +156,7 @@ def fetch_single(account_key, label_filter):
     secrets_dir = os.path.join(WORKSPACE_ROOT, ".secrets", target_vault)
     token_file = os.path.join(secrets_dir, "token.json")
     if not os.path.exists(token_file):
-        print(f"  [CRITICAL AUTH] Cuenta [{target_vault}] SIN TOKEN: No existe {token_file}. Requiere autorización OAuth.")
+        print(f"  [CRITICAL AUTH] Cuenta [{target_vault}] SIN TOKEN: No existe {token_file}. Requiere autorizaciÃ³n OAuth.")
         return []
     try:
         creds = Credentials.from_authorized_user_file(token_file, SCOPES)
@@ -183,7 +180,7 @@ def fetch_single(account_key, label_filter):
             subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'Sin Asunto')
             sender = next((h['value'] for h in headers if h['name'] == 'From'), 'Desconocido')
             
-            # 🛡️ FILTRO PURGA INMEDIATA DE BASURA (Urgente24 y Spam)
+            # ðŸ›¡ï¸ FILTRO PURGA INMEDIATA DE BASURA (Urgente24 y Spam)
             sender_lower = sender.lower()
             if "urgente24.com" in sender_lower or "news@urgente24.com" in sender_lower:
                 try:
@@ -200,7 +197,7 @@ def fetch_single(account_key, label_filter):
             
             sender_type, rule_applied = classify_sender(sender)
             if sender_type != "EXTERNAL_OR_GENERAL":
-                print(f"  [DETECCIÓN AUTOMÁTICA] Remitente: {sender} -> TIPO: {sender_type} | Regla: {rule_applied}")
+                print(f"  [DETECCIÃ“N AUTOMÃTICA] Remitente: {sender} -> TIPO: {sender_type} | Regla: {rule_applied}")
 
             emails.append({
                 "account": target_vault, 
@@ -224,7 +221,7 @@ def fetch_all(account_key="all", include_read=False):
     If include_read is True, fetch all inbox messages; otherwise only unread.
     """
     label_filter = ['INBOX'] if include_read else ['INBOX', 'UNREAD']
-    accounts_to_check = ["polydim_cla", "mpat_designer", "polydim_einsof", "cursos_agt", "cursos_ai_agt", "curious_clone"] if account_key == "all" else [account_key]
+    accounts_to_check = ["polydim_cla", "mpat_designer", "polydim_einsof", "cursos_agt", "cursos_ai_agt"] if account_key == "all" else [account_key]
     all_emails = []
     for acc in accounts_to_check:
         all_emails.extend(fetch_single(acc, label_filter))

@@ -2,7 +2,7 @@
 
 ## Identidad y Topología del Workspace
 Este workspace opera como el nodo de comunicaciones y vigilancia tecnológica de la cátedra POLYDIM.
-Mantiene seis dominios de identidades independientes y aislados:
+Mantiene cinco dominios de identidades independientes y aislados:
 
 1. **Dominio Oficial POLYDIM (`polydim_cla` / `polydim.cla@gmail.com`):**
    - Credenciales en `.secrets/polydim_cla/`
@@ -23,10 +23,6 @@ Mantiene seis dominios de identidades independientes y aislados:
 5. **Dominio EinsofOS / Vanguardia (`polydim_einsof` / `polydim.einsof@gmail.com`):**
    - Credenciales en `.secrets/polydim_einsof/`
    - Función: Nodo soberano de investigación teórica, ecosistema IA (Perplexity, Kaggle, Claude, OpenRouter, Qwen) y MCP Workspace.
-
-6. **Dominio Clon / Auxiliar (`curious_clone` / GCP: `curious-clone-503600-r1`):**
-   - Credenciales en `.secrets/curious_clone/`
-   - Función: Nodo réplica / pruebas paralelas de arquitectura.
 
 ---
 
