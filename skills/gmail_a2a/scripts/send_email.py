@@ -39,7 +39,8 @@ ALLOWED_RECIPIENTS = [
     "latinokarina@gmail.com",
     "mdelrrodriguez@gmail.com",
     "polydim.einsof@gmail.com",
-    "queimam@hotmail.com"
+    "queimam@hotmail.com",
+    "marcoscba5@gmail.com"
 ]
 
 # 🛡️ GUARDRAIL 2: Patrones DLP (Data Loss Prevention) - Anti-Leak de Claves y Passwords
@@ -84,8 +85,11 @@ def sanitize_content(text):
     return sanitized, leak_detected
 
 def send_reply(to_email, subject, body, account_key="account_a2a"):
+    target_vault = ACCOUNT_MAP.get(account_key.lower(), account_key)
+    is_course_channel = target_vault in ["cursos_agt", "cursos_ai_agt", "cursos_agt_ia"]
     to_email_clean = to_email.strip().lower()
-    if not any(target.lower() in to_email_clean for target in ALLOWED_RECIPIENTS):
+    
+    if not is_course_channel and not any(target.lower() in to_email_clean for target in ALLOWED_RECIPIENTS):
         print(f"SECURITY VETO: El destinatario '{to_email}' NO está en la lista blanca autorizada. Envío abortado.")
         sys.exit(1)
 
@@ -105,7 +109,12 @@ def send_reply(to_email, subject, body, account_key="account_a2a"):
     service = build('gmail', 'v1', credentials=creds)
 
     message = EmailMessage()
-    message.set_content(sanitized_body)
+    if "<html" in sanitized_body.lower() or "<div" in sanitized_body.lower() or "<p" in sanitized_body.lower():
+        plain_text = re.sub(r'<[^>]+>', '', sanitized_body)
+        message.set_content(plain_text)
+        message.add_alternative(sanitized_body, subtype='html')
+    else:
+        message.set_content(sanitized_body)
     message['To'] = to_email
     message['From'] = "me"
     

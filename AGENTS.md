@@ -18,9 +18,13 @@ Mantiene cinco dominios de identidades independientes y aislados:
 
 4. **Dominio Cursos AI (`cursos_ai_agt` / `cursos.ai.agt@gmail.com`):**
    - Credenciales en `.secrets/cursos_ai_agt/`
-   - Función: Contacto profesional, canal de IA para cursos avanzados.
+   - Función: Contacto profesional, canal de IA para cursos avanzados. (100% ACTIVA).
 
-5. **Dominio EinsofOS / Vanguardia (`polydim_einsof` / `polydim.einsof@gmail.com`):**
+5. **Dominio Cursos AGT IA (`cursos_agt_ia` / `cursos.agt.ia@gmail.com`):**
+   - Credenciales en `.secrets/cursos_agt_ia/`
+   - Función: Canal alternativo / nuevo de IA para la cátedra. (Registrada, pendiente credentials.json).
+
+6. **Dominio EinsofOS / Vanguardia (`polydim_einsof` / `polydim.einsof@gmail.com`):**
    - Credenciales en `.secrets/polydim_einsof/`
    - Función: Nodo soberano de investigación teórica, ecosistema IA (Perplexity, Kaggle, Claude, OpenRouter, Qwen) y MCP Workspace.
 

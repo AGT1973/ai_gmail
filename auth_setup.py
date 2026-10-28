@@ -14,10 +14,13 @@ ACCOUNT_MAP = {
     "account_sota": "account_sota",
     "account_cursos": "account_cursos",
     "account_cursos_ai": "account_cursos_ai",
+    "account_cursos_ia": "account_cursos_ia",
     "account_clone": "account_clone",
     "curious-clone-503600-r1": "account_clone",
     "cursos.agt@gmail.com": "account_cursos",
     "cursos.ai.agt@gmail.com": "account_cursos_ai",
+    "cursos.agt.ia@gmail.com": "cursos_agt_ia",
+    "cursos_agt_ia": "cursos_agt_ia",
     "polydim.cla@gmail.com": "account_a2a",
     "ai.mpat.designer@gmail.com": "account_sota"
 }

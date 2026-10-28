@@ -19,16 +19,19 @@ ACCOUNT_MAP = {
     "mpat_designer": "mpat_designer",
     "cursos_agt": "cursos_agt",
     "cursos_ai_agt": "cursos_ai_agt",
+    "cursos_agt_ia": "cursos_agt_ia",
     "polydim_einsof": "polydim_einsof",
     # Legacy aliases (backward compatibility)
     "account_a2a": "polydim_cla",
     "account_sota": "mpat_designer",
     "account_cursos": "cursos_agt",
     "account_cursos_ai": "cursos_ai_agt",
+    "account_cursos_ia": "cursos_agt_ia",
     "account_einsof": "polydim_einsof",
     # Email-based resolution
     "cursos.agt@gmail.com": "cursos_agt",
     "cursos.ai.agt@gmail.com": "cursos_ai_agt",
+    "cursos.agt.ia@gmail.com": "cursos_agt_ia",
     "polydim.cla@gmail.com": "polydim_cla",
     "ai.mpat.designer@gmail.com": "mpat_designer",
     "polydim.einsof@gmail.com": "polydim_einsof"
@@ -221,10 +224,19 @@ def fetch_all(account_key="all", include_read=False):
     If include_read is True, fetch all inbox messages; otherwise only unread.
     """
     label_filter = ['INBOX'] if include_read else ['INBOX', 'UNREAD']
-    accounts_to_check = ["polydim_cla", "mpat_designer", "polydim_einsof", "cursos_agt", "cursos_ai_agt"] if account_key == "all" else [account_key]
+    accounts_to_check = ["polydim_cla", "mpat_designer", "polydim_einsof", "cursos_agt", "cursos_ai_agt", "cursos_agt_ia"] if account_key == "all" else [account_key]
     all_emails = []
     for acc in accounts_to_check:
         all_emails.extend(fetch_single(acc, label_filter))
+
+    # Auto-procesamiento de solicitudes de Drive en cuentas de cursos
+    if "cursos_agt" in accounts_to_check or account_key == "all":
+        try:
+            from auto_grant_drive_requests import process_pending_requests
+            process_pending_requests(auto_reply=True)
+        except Exception as e:
+            pass
+
     print(json.dumps({"scanned_accounts": accounts_to_check, "emails": all_emails}))
 
 if __name__ == "__main__":
