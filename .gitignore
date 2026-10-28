@@ -22,6 +22,7 @@ DOCUMENTACION/*.json
 DOCUMENTACION/drive_access_granted_log.json
 DOCUMENTACION/*.png
 DOCUMENTACION/*.jpg
+skills/
 skills/gmail_a2a/
 polydim_mail_cron.py
 auth_setup.py
