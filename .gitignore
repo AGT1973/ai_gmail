@@ -68,3 +68,7 @@ ENTREGABLE_ALUMNOS_BUILD/
 OllamaSetup.exe
 *.exe
 *.mp4
+*.exp
+*.lib
+*.pdb
+
