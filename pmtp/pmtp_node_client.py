@@ -1,5 +1,5 @@
 """
-pmtp_telepathy.py — Cliente Canónico PMTP Trans-Nodo AGY Host <-> Aladín.
+pmtp_node_client.py — Cliente Canónico PMTP Trans-Nodo AGY Host <-> Aladín.
 Protocolo de red SOTA: Frame binario 128B exacto, soporte de tensores en S^{D-1}
 y eventos de metadatos JSON opcionales, con handshake bidireccional y ACK IEEE-754.
 """
@@ -20,8 +20,8 @@ HEADER_STRUCT = "<IHHQ4I QIIQQ 64s"
 HEADER_SIZE = 128
 MAX_PAYLOAD_BYTES = 1024 * 1024 * 16  # 16 MB
 
-class AladinTelepathyClient:
-    """Cliente de telepatía tensorial PMTP entre nodos heterogéneos."""
+class AladinBridgeClient:
+    """Cliente de enlace tensorial tensorial PMTP entre nodos heterogéneos."""
 
     def __init__(
         self,
@@ -37,7 +37,7 @@ class AladinTelepathyClient:
     def send_tensor(
         self,
         tensor: np.ndarray,
-        slab_id: str = "pmtp_telepathy",
+        slab_id: str = "pmtp_node_bridge",
         metadata: Optional[Dict[str, Any]] = None,
         timeout: float = 8.0,
     ) -> Dict[str, Any]:
@@ -117,3 +117,7 @@ class AladinTelepathyClient:
             "remote_proc_ms": proc_ms,
             "norm_err": norm_err,
         }
+
+
+# Alias de retrocompatibilidad
+AladinTelepathyClient = AladinBridgeClient

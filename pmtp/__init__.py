@@ -65,7 +65,7 @@ def rust_stiefel_retract(mat: np.ndarray, max_iters: int = 20, tol: float = 1e-1
 
 HEADER_SIZE = PmtpShmBus.HEADER_SIZE
 
-from .pmtp_telepathy import AladinTelepathyClient
+from .pmtp_node_client import AladinBridgeClient, AladinTelepathyClient
 
 __all__ = [
     "PmtpShmBus",
@@ -76,6 +76,6 @@ __all__ = [
     "HEADER_SIZE",
     "neumaier_norm",
     "rust_stiefel_retract",
-    "AladinTelepathyClient",
+    "AladinBridgeClient", "AladinTelepathyClient",
 ]
 
