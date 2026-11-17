@@ -1,5 +1,11 @@
 # Textos para el Video MP4 en LinkedIn
 
+**Enlace del Post Publicado:** https://lnkd.in/p/dqxZhu46
+*(URL canónica: https://www.linkedin.com/posts/ariel-h-garcia-t_artificialintelligence-machinelearning-deeplearning-ugcPost-7527766780354650112-DuH2)*
+**Archivo de video asociado:** `E:\POLYDIM_EINSOF\DOCUMENTOS_MAESTROS\POLYDIM_EINSOF_EXPLAINED_FOR_HUMANS_AND_SCIENTISTS.mp4` (11.7 MB)
+
+---
+
 ## Versión en Inglés (2078 caracteres — Límite LinkedIn: 3.000)
 
 ```text
