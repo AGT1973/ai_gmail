@@ -1,0 +1,544 @@
+# CONTENIDO DE: POLYDIM_EinsofOS_Informe_Rondas_v2_v3_v4_19Nov.pdf
+Total Páginas: 9
+
+
+--- PÁGINA 1 ---
+
+POLYDIM / EinsofOS — Informe técnico de 
+tres rondas de pruebas (v2, v3, v4) — 19-11-
+2026
+0. Qué hicimos en cada ronda
+Todo corrió en GPU gratuitas de Kaggle con una sola cuenta, el código de ustedes fijado
+por commit y sin instalar nada en nuestra infraestructura.
+Ronda
+Cuándo
+Qué se probó
+Resultado clave
+v2
+19-11
+(mañana)
+6 pruebas originales: traspaso por
+vectores (última capa, K=8
+promediados, a inputs_embeds ),
+puente Stiefel W_fp64 en Hermes-8B,
+DeepSeek-V2-Lite en 1 × T4, código
+A/B, benchmark y worker de la flota
+Vectores 0/10 (texto 7/10 y
+10/10); einsof2 −28,4 % de
+tokens de salida con los
+mismos aciertos;
+DeepSeek no cargó
+v3
+19-11
+(tarde)
+Las mismas pruebas con el código de
+ustedes fijado en 47cf74e: su receta
+textual ( AttentionSummaryPooling +
+ResidualStreamSpliceHook modo
+add en layers[-2] ), su
+StiefelImpedanceProjector , una
+versión corregida del empalme (solo
+durante el prefill, en posiciones
+reservadas, capas L-1 y 2L/3),
+DeepSeek en T4 × 2 como indicaron
+(más un reintento con max_memory ) y
+su script de remediación tal cual
+Vectores 0–1/10; ahorro
+−28,4 % idéntico;
+DeepSeek no cargó; script
+de remediación rc = 0 con
+tensores aleatorios
+v4
+19-11
+(tarde)
+"Una oportunidad más" con métodos
+actuales sin entrenamiento: memoria
+KV compartida, pensamientos
+latentes estilo LatentMAS y
+comunicación por activaciones
+(Ramesh & Li, 2025)
+KV compartido 7/10 con
+−76 % de tokens de
+entrada del receptor; el
+resto 0–2/10
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 1 of 9
+
+
+--- PÁGINA 2 ---
+
+1. Resumen ejecutivo
+Se volvió a probar el commit 47cf74e de polydim-suite en Kaggle (GPU gratuita T4
+16 GB; T4 × 2 para el benchmark de código), con las mismas tareas que la versión
+anterior (v2) y decodificación determinista.
+Prueba 1 (Qwen2.5-1.5B + einsof2): texto 7/10. La receta publicada ( A_add ) 1/10, con
+salida corrompida; el proyector Stiefel 0/10; el empalme corregido en capa profunda 0–
+1/10.
+Prueba 2 (Hermes-3-8B + W_fp64): texto 10/10. Todas las variantes vectoriales 0/10,
+salvo el empalme por token en 2L/3, con 1/10.
+Pruebas 3–5 (código): el adaptador einsof2 mantiene 7/12 aciertos con −28,4 % de
+tokens de salida (1132 → 811), idéntico a v2. Con reparación por ejecución sube a 9/12.
+DeepSeek-Coder-V2-Lite: con la receta indicada (4-bit, device_map="auto" , T4 × 2)
+el modelo no cargó en ninguno de los dos intentos.
+Ronda v4 (estado del arte, sin entrenamiento): compartir la memoria KV entre dos
+copias del mismo modelo da 7/10, igual que el texto, y el receptor procesa −76 % de
+tokens de entrada (307 frente a 1279). Los "pensamientos latentes" estilo LatentMAS
+dan 1–2/10 y la comunicación por activaciones 0/10. Ninguno de estos métodos usa
+módulos de Polydim.
+Conclusión: con los mecanismos de Polydim (Stiefel, proyector, empalme), el traspaso
+por vectores sigue sin transmitir el resultado al receptor. El ahorro de tokens del
+adaptador einsof2 en generación de código está confirmado. El único traspaso latente
+que funcionó es compartir la memoria KV entre copias idénticas del modelo.
+2. Tabla KPI general
+Prueba
+Modelo
+Métrica
+v2 (anterior)
+v3 (ahora)
+Veredicto
+1
+Qwen2.5-1.5B +
+einsof2
+Aciertos texto /
+mejor variante
+vectorial
+7/10 / 0/10
+7/10 / 1/10
+Sin transmisión útil
+2
+Hermes-3-8B +
+W_fp64
+Aciertos texto /
+mejor variante
+vectorial
+10/10 / 0/10
+10/10 / 1/10
+Sin transmisión útil
+3
+DeepSeek-Coder-
+V2-Lite (+
+adaptador)
+Carga y ejecución
+No cargó (1
+× T4)
+No cargó (T4
+× 2, 2
+intentos)
+No reproducible con
+la receta
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 2 of 9
+
+
+--- PÁGINA 3 ---
+
+3. Metodología común
+Entorno: Kaggle free GPU (T4 16 GB; T4 × 2 para el benchmark).
+Decodificación: greedy decoding.
+Tareas: 10 tareas de hand‑off (misma selección que v2) y 12 tareas de generación de
+código.
+Código: versión 47cf74e, sin modificaciones.
+Receiver: nunca recibe el contexto completo; solo el vector de hand‑off o el texto
+generado.
+Tabla de legendas de brazos
+Prueba
+Modelo
+Métrica
+v2 (anterior)
+v3 (ahora)
+Veredicto
+4
+Qwen2.5-1.5B base
+vs einsof2
+Aciertos / tokens de
+salida
+7/12 · 1132 vs
+7/12 · 811
+7/12 · 1132 vs
+7/12 · 811
+Ahorro −28,4 %
+confirmado
+5
+Benchmark
+comparativo
+Mejor brazo
+Coder-7B
+10/12 · 789
+Coder-7B
+10/12 · 789
+Sin cambio
+v4
+Qwen2.5-1.5B +
+einsof2
+Mejor traspaso
+latente (aciertos /
+tokens de entrada
+del receptor)
+—
+—
+KV compartido 7/10 ·
+307 (texto 7/10 ·
+1279)
+—
+Script de
+remediación de los
+autores
+Código de salida
+—
+rc = 0
+Solo tensores
+aleatorios (ver §8)
+Brazo
+Descripción
+T
+El receptor recibe el análisis como texto.
+N
+El receptor recibe solo la pregunta (línea inferior).
+A_add
+Receta del autor:
+AttentionSummaryPooling(last_token) de la
+capa L‑1 +
+ResidualStreamSpliceHook(model.layers[-2],
+mode='add') .
+P_proj
+StiefelImpedanceProjector (d→d) sobre los
+estados L‑1 de A, en inputs_embeds (capa 0).
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 3 of 9
+
+
+--- PÁGINA 4 ---
+
+4. Prueba 1 (Qwen2.5‑1.5B + einsof2)
+Ejemplos de respuestas
+Brazo
+Descripción
+W_rt_Lm1
+(Hermes) Proyección z = W h y retorno Wᵀ z ,
+splice por token en L‑1.
+S_tok_<layer>
+Splice corregido: por token, reemplaza posiciones
+de placeholder en el flujo residual de B en esa
+profundidad, solo prefill.
+S_last_<layer>
+Splice corregido: una posición con el estado del
+último token de A en esa profundidad.
+Brazo
+Aciertos/10
+Tokens de entrada del receptor
+T
+7/10
+1293
+N
+0/10
+427
+A_add
+1/10
+427
+P_proj
+0/10
+1297
+S_tok_Lm1
+1/10
+1297
+S_last_Lm1
+0/10
+507
+S_tok_two_thirds
+1/10
+1297
+S_last_two_thirds
+0/10
+507
+Gold
+T
+N
+A_add
+P_proj
+S_tok_Lm1
+S_last_Lm1
+S_tok_two_thirds
+S_last_two_thirds
+385
+To find the
+final
+inventory co
+12345
+133333333333
+100
+105
+105
+105
+105
+22
+To calculate
+Ana's age,
+we add
+25
+2:\n:\n: follows
+the :\n::\n:\n:
+30
+30
+30
+72
+30
+8790
+8790
+80
+80 or port 's
+server running o
+13
+8080
+80
+80
+80
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 4 of 9
+
+
+--- PÁGINA 5 ---
+
+5. Prueba 2 (Hermes‑3‑8B + W_fp64)
+Nota: nuestro script falló recién al guardar el archivo final (un error nuestro al serializar).
+Las 10 tareas se ejecutaron completas y los resultados se tomaron del log.
+Gold
+T
+N
+A_add
+P_proj
+S_tok_Lm1
+S_last_Lm1
+S_tok_two_thirds
+S_last_two_thirds
+17
+17
+12
+1 Time:** Time**
+Time Time Tim
+23
+14
+12
+18
+12
+Brazo
+Aciertos/10
+Tokens de entrada del receptor
+T
+10/10
+1045
+N
+0/10
+336
+A_add
+0/10
+336
+P_proj
+0/10
+1053
+W_rt_Lm1
+0/10
+1053
+S_tok_Lm1
+0/10
+1053
+S_last_Lm1
+0/10
+416
+S_tok_two_thirds
+1/10
+1053
+S_last_two_thirds
+0/10
+416
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 5 of 9
+
+
+--- PÁGINA 6 ---
+
+6. Pruebas 3‑5 (benchmark de código)
+Comparación con v2: A, B y D dan exactamente los mismos números que en v2. C
+(einsof2 + hasta 2 reparaciones) llega a 9/12 y E (Coder-7B + reparación) a 10/12.
+Ahorro de tokens: B frente a A: −28,4 % de tokens de salida (811 frente a 1132) con los
+mismos aciertos (7/12).
+7. DeepSeek-Coder-V2-Lite
+Seguimos la indicación recibida: acelerador GPU T4 × 2 (2 GPU detectadas),
+load_in_4bit=True y device_map="auto" , con y sin el adaptador Polydim-
+Einsof/einsof2-deepseek-v4-stiefel-adapter .
+Ni el modelo base ni el modelo con el adaptador llegaron a cargarse, así que no hay
+métricas de código para este modelo. Si tienen un script que cargue DeepSeek-Coder-V2-
+Lite en T4 × 2 (versiones de transformers / bitsandbytes / accelerate y el
+device_map exacto), lo ejecutamos tal cual.
+Brazo
+Pasados/12
+Tokens de
+entrada
+Tokens de
+salida
+Reparaciones
+usadas
+A_1.5B_base
+7/12
+900
+1132
+0
+B_1.5B_polydim
+7/12
+900
+811
+0
+C_1.5B_polydim_repair2
+9/12
+3486
+1335
+9
+D_coder7B
+10/12
+900
+789
+0
+E_coder7B_repair2
+10/12
+2199
+1061
+4
+Intento
+Configuración
+Resultado
+1
+4-bit, device_map="auto"
+ValueError: Some modules are
+dispatched on the CPU or the
+disk…
+2
+Igual + max_memory = 14 GiB por GPU,
+low_cpu_mem_usage=True
+Mismo error
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 6 of 9
+
+
+--- PÁGINA 7 ---
+
+7b. Verificación del repositorio canónico (POLYDIM_EinSof)
+El repositorio canónico (HEAD c4e44f0 ) contiene el commit 47cf74e. El único cambio
+posterior en pmtp/pmtp_residual_splice.py es ff260fe (19-11, 14:51): agrega al
+proyector un compensador de fase RoPE que solo actúa cuando emisor y receptor tienen
+bases RoPE distintas. En las pruebas 1 y 2, emisor y receptor son el mismo modelo, así que
+ese cambio no altera nada y los resultados de v3 valen también para la última versión. El
+hook de empalme y el pooling no cambiaron.
+7c. Ronda v4 — métodos del estado del arte (Qwen2.5-1.5B + 
+einsof2, mismas 10 tareas)
+Variante
+Qué recibe el receptor (nunca el
+texto del análisis)
+Aciertos
+Tokens de entrada
+del receptor
+T (texto,
+referencia)
+el análisis como texto
+7/10
+1279
+N (nada,
+referencia)
+solo la pregunta
+0/10
+427
+KV_full
+la memoria KV del emisor (su
+prompt con el contexto + su
+análisis) y agrega solo su pregunta
+7/10
+307
+KV_an
+la memoria KV de los tokens del
+análisis, sin el contexto
+6/10
+307
+LAT_8 / LAT_24
+8 / 24 "pensamientos latentes" del
+emisor, sin texto (estado oculto
+realineado al espacio de entrada
+por mínimos cuadrados, estilo
+LatentMAS)
+1/10 /
+2/10
+307
+AC suma L/2 ·
+2L/3
+estado del último token del emisor
+sumado al del receptor en esa capa
+0/10 ·
+0/10
+427
+AC reemplazo L/2
+· 2L/3
+ídem, reemplazando
+0/10 ·
+0/10
+427
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 7 of 9
+
+
+--- PÁGINA 8 ---
+
+Compartir la memoria KV funciona: iguala al texto (7/10) y el receptor procesa 4
+veces menos tokens. Es la técnica de la investigación reciente (familia LatentMAS /
+KV-sharing, arXiv 2511.20639).
+Límite: solo funciona entre copias del mismo modelo (mismos pesos y misma
+tokenización), y no usa la variedad de Stiefel ni ningún módulo pmtp .
+La primera corrida de los pensamientos latentes falló por un error nuestro de tipos de
+datos (matriz de alineación en fp16 frente a un estado en fp32). Se corrigió y se volvió
+a correr (v4b); los números de arriba son los de esa segunda corrida.
+8. Hallazgos sobre el código publicado
+1. benchmarks/polydim_residual_splice_remediation.py solo pasa tensores aleatorios
+a través del projector y verifica formas y finitud; no carga modelo de lenguaje ni mide
+hand‑off (rc = 0 reproducido en Kaggle).
+2. StiefelImpedanceProjector es una matriz ortogonal aleatoria con semilla +
+LayerNorm, nunca entrenada; no puede mapear semántica de un modelo a otro.
+3. ResidualStreamSpliceHook mode='add' añade el latente en cada llamada de forward,
+incluyendo cada paso de decodificación de 1 token y en posiciones 0…k (inicio del
+prompt), no en slots reservados; esto corrompe la generación (ej. "133333333333",
+"2:\n:\n: follows the").
+4. AttentionSummaryPooling(mode='last_token') devuelve solo h[:, -1:] ; un solo
+vector no puede transportar un análisis multi‑facto.
+5. Per‑token splice mantiene una posición por token de análisis, por lo que la longitud de
+entrada del receptor es idéntica a la de texto; no hay ahorro de tokens de entrada
+aunque funcionara.
+9. Recomendaciones concretas
+Entrenar el projector con una pérdida de reconstrucción/answer para que aprenda la
+relación semántica entre los modelos.
+Activar el hook únicamente durante el prefill y en slots reservados, evitando la
+inserción en cada token de decodificación.
+Implementar un benchmark end‑to‑end con un modelo real y métricas de precisión, no
+con tensores aleatorios.
+Registrar y reportar el conteo exacto de tokens de entrada y salida en cada ejecución.
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 8 of 9
+
+
+--- PÁGINA 9 ---
+
+Publicar el script de evaluación exacto (incluyendo la lógica de hand‑off y la
+verificación de resultados).
+Si buscan traspaso latente real: compartir la memoria KV entre copias del mismo
+modelo (funciona hoy), o entrenar un traductor de KV / estados entre modelos
+distintos (tipo Cache-to-Cache o alineación entrenada), siempre medido de punta a
+punta con aciertos.
+Con gusto volvemos a correr estas mismas pruebas sobre una nueva versión.
+10. Reproducibilidad
+Entorno Kaggle: GPU T4 16 GB (T4 × 2 para el benchmark).
+Modelos: Qwen/Qwen2.5-1.5B-Instruct + einsof2-qlora-dual-t4-adapter;
+NousResearch/Hermes-3-Llama-3.1-8B (4-bit) + W_fp64 de Hermes-3-Llama-3.1-8B-
+PMTP-Einsof; Qwen2.5-Coder-7B-Instruct (4-bit); DeepSeek-Coder-V2-Lite-Instruct.
+Commit: 47cf74e (polydim-suite).
+Scripts de prueba y datos de entrada disponibles bajo solicitud.
+Quedamos a su disposición para cualquier aclaración adicional.
+Redacción: borradores de modelos gratuitos (gpt-oss-20b vía Groq y deepseek-r1-distill vía
+Cloudflare); como ambos agregaron cifras que no estaban en los datos, el texto final lo
+compuso y lo verificó claude (Opus) contra los resultados medidos, en el orquestador cw
+2030.
+POLYDIM / EinsofOS — Informe técnico de tres rondas de pruebas (v2, v3, v4) — 19-11-2026
+Page 9 of 9

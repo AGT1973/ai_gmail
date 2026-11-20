@@ -1,0 +1,374 @@
+# CONTENIDO DE: POLYDIM_EinsofOS_Informe_Ronda_5_20Nov2026.pdf
+Total Páginas: 7
+
+
+--- PÁGINA 1 ---
+
+POLYDIM / EinsofOS — Informe de la ronda 
+5 — 20-11-2026
+0. Resultado en una línea
+El commit nuevo 47eefb7 no cambia nada del traspaso por vectores (resultados idénticos
+a v3, 80 de 80 respuestas iguales); la receta de DeepSeek-Coder-V2-Lite sí carga en T4 ×
+2 si se fija la versión de transformers ; y el harness de HumanEval+ no corre ningún
+modelo: copia los números de un JSON viejo, y en ese JSON el modo "Polydim" (C) es solo
+un texto agregado al prompt.
+1. Qué se probó
+Prueba
+Qué
+Kernel
+Kaggle
+Estado
+1
+Traspaso v3 (Qwen2.5-1.5B + einsof2) con el código
+en 47eefb7
+cw-polydim-
+r5-handoff-
+20261120-
+094239
+Completo
+2a
+DeepSeek-Coder-V2-Lite con su receta tal cual
+cw-polydim-
+r5-deepseek-
+20261120-
+094550
+No cargó
+2b
+Reintento 1: transformers==4.44.2 (su mínimo)
+cw-polydim-
+r5-deepseek-
+b-20261120-
+094952
+Falló la
+instalación
+2c
+Reintento 2: transformers>=4.44.2,<4.48
+cw-polydim-
+r5-deepseek-
+c-20261120-
+095237
+Cargó y
+corrió
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 1 of 7
+
+
+--- PÁGINA 2 ---
+
+Todo en GPU gratuitas de Kaggle, una sola cuenta, corridas una detrás de otra,
+decodificación determinista (greedy), cero dólares, nada instalado en nuestra
+infraestructura.
+2. Prueba 1 — traspaso por vectores con el commit 47eefb7
+Qué cambió en el código desde 47cf74e (v3): en pmtp/ solo cambió
+pmtp_residual_splice.py (+60 / −7 líneas): el proyector Stiefel recibe un "compensador
+de fase RoPE". Ese compensador solo se activa si emisor y receptor tienen bases RoPE
+distintas. Medido en el kernel: con el mismo modelo, enable_rope_compensation =
+False . El hook de empalme y el pooling no cambiaron.
+Prueba
+Qué
+Kernel
+Kaggle
+Estado
+3
+benchmarks/humaneval_plus_ablation_164_real
+.py + reproducción del PILOT20 con un modelo
+real
+cw-polydim-
+r5-
+humaneval-
+20261120-
+100928
+Completo
+Brazo
+v3
+(47cf74e)
+Ronda 5
+(47eefb7)
+Tokens de entrada
+del receptor
+T (texto)
+7/10
+7/10
+1293
+N (solo la pregunta)
+0/10
+0/10
+427
+A_add (su receta:
+AttentionSummaryPooling último
+token + ResidualStreamSpliceHook
+modo add en layers[-2] )
+1/10
+1/10
+427
+P_proj ( StiefelImpedanceProjector a
+inputs_embeds )
+0/10
+0/10
+1297
+S_tok L-1 / 2L/3 (empalme corregido por
+token)
+1/10 / 1/10
+1/10 / 1/10
+1297
+S_last L-1 / 2L/3
+0/10 / 0/10
+0/10 / 0/10
+507
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 2 of 7
+
+
+--- PÁGINA 3 ---
+
+Las 80 respuestas (10 tareas × 8 brazos) son idénticas carácter por carácter a las de
+v3.
+El único acierto de A_add es "9:** SUM SUM S…": salida corrompida que empieza por
+casualidad con el número correcto.
+Ejemplos de A_add: "133333333333" (esperado 385), "844444444444" (esperado 32),
+"4RemainingRema…" (esperado 320).
+3. Prueba 2 — DeepSeek-Coder-V2-Lite-Instruct con su receta (T4 
+× 2)
+Receta usada: nf4 + doble cuantización, device_map="auto" , max_memory=
+{0:"12.2GiB",1:"14.5GiB"} , trust_remote_code=True ; tipo de cómputo bf16 (el de
+ustedes) y fp16 (el nativo de la T4). Sin adaptador (la receta no lo incluye).
+Reparto en las GPU (2c): 12 módulos en la GPU 0 y 18 en la GPU 1 (hasta la capa 26, norma
+final y lm_head ). Memoria: 3,8 GiB + 5,7 GiB; huella del modelo 8,96 GiB. Carga: 344 s
+(bf16, incluye descarga) y 138 s (fp16).
+Las mismas 12 tareas de código del benchmark v3:
+Intento
+Versiones
+Resultado
+2a, receta literal
+( transformers>=4.44.2 )
+pip resolvió
+transformers 5.20.2
+No cargó: ImportError: cannot
+import name
+'is_torch_fx_available' en el
+modeling_deepseek.py del
+modelo. Sin código remoto:
+"Some modules are dispatched
+on the CPU"
+2b, transformers==4.44.2
+—
+Falló la instalación: tokenizers
+0.19 no compila en Python 3.13
+(imagen actual de Kaggle)
+2c, transformers>=4.44.2,
+<4.48
+transformers 4.47.1,
+accelerate 1.15.0,
+bitsandbytes 0.50.2,
+torch 2.11
+Cargó con bf16 y con fp16
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 3 of 7
+
+
+--- PÁGINA 4 ---
+
+bf16 funciona en la T4 (por emulación), pero fp16 es 13 % más rápido y acertó una
+tarea más ( merge_intervals ).
+Ambos fallan parse_retry_after .
+Para que la receta funcione hay que fijar transformers<4.48 : con "≥4.44.2" se
+instala hoy la 5.x, que rompe el código remoto del modelo.
+4. Prueba 3 — humaneval_plus_ablation_164_real.py y el 
+PILOT20
+4.1 Qué hace el harness
+No carga ni ejecuta ningún modelo. Importa solo numpy , json , pmtp y la biblioteca
+estándar; no hay transformers , torch , llamadas a API ni tests de HumanEval.
+Los números Pass@1 / tokens de los modos A/B/C/D se copian tal cual de
+PILOT20_HUMANEVALPLUS_REPORT_A_B_C_D.json .
+Lo único que mide "en vivo" son latencias de operaciones numéricas con vectores
+aleatorios.
+Corrió con rc = 0 en 17 s.
+Brazo
+Pasadas/12
+Tokens de
+entrada
+Tokens de
+salida
+Tiempo de
+generación
+DeepSeek-V2-Lite 4-bit,
+cómputo bf16 (su receta)
+10/12
+665
+1014
+224 s
+DeepSeek-V2-Lite 4-bit,
+cómputo fp16
+11/12
+665
+1015
+194 s
+Referencia v3: Qwen2.5-
+Coder-7B 4-bit
+10/12
+900
+789
+—
+Referencia v3: Qwen2.5-1.5B
++ einsof2
+7/12
+900
+811
+—
+Medida "en vivo" del harness
+Su JSON
+(Windows)
+Kaggle (CPU del
+kernel)
+A: ida y vuelta JSON (ms)
+1,765
+1,29
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 4 of 7
+
+
+--- PÁGINA 5 ---
+
+Estas cifras son tiempos de álgebra lineal; no dicen nada de aciertos ni de tokens.
+4.2 ¿Los modos C/D usan estados latentes de un modelo?
+El JSON lo genera benchmarks/run_pilot20_humanevalplus_abcd.py . Leyendo ese
+script:
+D: una llamada normal al modelo con el enunciado.
+A: tres llamadas en cadena (análisis → contrato → código) pasándose texto.
+B: un vector aleatorio pasa por matrices (sin relación con la tarea) y después una
+llamada normal con el system prompt "Verify edge cases…".
+C: un vector unitario fijo pasa por funciones C++/Rust (DLL de Windows); lo único
+que llega al modelo es un system prompt de texto: "Axioma de Integridad Algorítmica
+POLYDIM V26505 (PMTP Gen=N): Maneja estrictamente casos límite…".
+Ningún modo usa estados ocultos de un modelo. C y B son "D + una frase en el
+system prompt".
+4.3 ¿Se puede reproducir el PILOT20?
+Tal cual, no: el script necesita una clave de Cerebras leída de una base Postgres local,
+DLLs de Windows y rutas E:\… . Ninguna está en el repositorio.
+El JSON es coherente por dentro, pero no trae prompts ni código generado, así que
+no se puede verificar tarea por tarea.
+En su propio JSON, D (sin Polydim) es el mejor: 17/20 Plus con 14 910 tokens, frente a
+C 15/20 con 17 382 tokens.
+Medida "en vivo" del harness
+Su JSON
+(Windows)
+Kaggle (CPU del
+kernel)
+B: 10 saltos lineales (µs) / defecto de
+ortogonalidad
+923,8 / 8266
+207,3 / 8266
+C: proyección QDWH + IPC (µs, total)
+9525
+21100
+C: defecto de ortogonalidad máx.
+1,3e-15
+2,0e-15
+D: IPC directo (µs, mediana)
+215,4
+8665
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 5 of 7
+
+
+--- PÁGINA 6 ---
+
+4.4 Reproducción del protocolo con un modelo real (Kaggle T4)
+Mismo script de ellos para las 20 tareas, los prompts, la lógica de cada brazo y sus
+funciones extract_python_code / evaluate_code_on_task . Cambio: Qwen/Qwen2.5-
+Coder-7B-Instruct 4-bit local en lugar de Cerebras. Datos: evalplus oficial.
+C y D aprueban exactamente las mismas tareas, una por una. C solo gasta +13 % de
+tokens (la frase extra).
+B pierde una tarea ( HumanEval/64 ) por un error de formato del bloque de código, no
+por el vector.
+A gasta 8,6 veces más tokens que D y no acierta más.
+Conclusión: con un modelo real, el modo "Polydim" no mejora ni los aciertos ni los
+tokens frente a la llamada directa.
+5. Lo que dicen vs. lo que medimos
+Modo
+Su JSON (Cerebras) Base
+/ Plus / tokens
+Medido en Kaggle (Coder-7B)
+Base / Plus / tokens
+A (3 saltos de texto)
+13 / 12 / 65 903
+16 / 15 / 47 037
+B ("vector afín" = frase en el
+system prompt)
+14 / 14 / 16 868
+15 / 15 / 6 585
+C ("Polydim Stiefel" = frase en
+el system prompt)
+16 / 15 / 17 382
+16 / 16 / 6 179
+D (llamada directa)
+18 / 17 / 14 910
+16 / 16 / 5 448
+Afirmación
+Medido
+Veredicto
+El commit nuevo mejora el traspaso
+Stiefel
+80/80 respuestas idénticas
+a v3; compensador RoPE
+inactivo con el mismo
+modelo
+Sin cambio
+DeepSeek-V2-Lite carga en T4 × 2 con la
+receta
+Carga solo con
+transformers<4.48 ; 10/12
+(bf16), 11/12 (fp16)
+Funciona con
+ajuste de versión
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 6 of 7
+
+
+--- PÁGINA 7 ---
+
+6. Recomendaciones
+1. Fijar transformers>=4.44.2,<4.48 en la receta de DeepSeek-Coder-V2-Lite (o
+actualizar el código remoto).
+2. En el PILOT20, comparar contra D (llamada directa), no solo contra A; y publicar
+prompts, salidas y el script ejecutable sin claves privadas ni DLLs.
+3. Para que el modo C sea "latente", el modelo receptor tiene que recibir estados ocultos
+del emisor (por ejemplo, la memoria KV compartida, que en la ronda v4 dio 7/10 con
+−76 % de tokens de entrada).
+4. Llamar "ablation real" solo a un harness que ejecute modelos y tests en la misma
+corrida.
+7. Reproducibilidad
+Código de terceros: AGT1973/POLYDIM_EinSof y AGT1973/polydim-suite , commit
+47eefb7e621b1e54ef1ef0a32254f438528c8edb, clonado dentro de cada kernel.
+Reintentos usados: prueba 2 = 2 reintentos (2b, 2c); pruebas 1 y 3 = ninguno.
+Redacción: claude (Opus) a partir de los resultados medidos. Revisión de datos: llama-
+3.3-70b aprobó todos los números después de una verificación automática contra los
+resultados.
+Afirmación
+Medido
+Veredicto
+humaneval_plus_ablation_164_real =
+evaluación real
+No ejecuta ningún modelo;
+copia los Pass@1 de un
+JSON
+No es una
+evaluación de
+modelos
+Modo C usa el "pensamiento" latente
+C = texto en el system
+prompt; ningún estado
+oculto
+No usa estados
+latentes
+C ahorra tokens frente al texto de varios
+saltos
+Cierto frente a A, pero C
+gasta más que D y no
+acierta más
+El ahorro viene de
+no hacer los
+saltos, no de
+Polydim
+POLYDIM / EinsofOS — Informe de la ronda 5 — 20-11-2026
+Page 7 of 7

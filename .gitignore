@@ -63,6 +63,7 @@ node_modules/
 # Temporary builds and big zip files
 *.zip
 ENTREGABLE_ALUMNOS_BUILD/
+llama.cpp/
 
 # Large binaries
 OllamaSetup.exe

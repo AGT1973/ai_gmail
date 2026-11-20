@@ -1,81 +1,71 @@
-# PMTP - Polydimensional Manifold Transfer Protocol
-# Canonical Package Interface with Native Silicon Dispatch (C++20 & Rust 2024)
-import os, sys, ctypes
-import numpy as np
+"""
+PMTP: Physical Manifold Transport Protocol & Inter-Process Latent Alignment
+"""
 
-from .pmtp_shm_bus import (
-    PmtpShmBus,
-    PmtpCompactHeader,
-    PmtpLeasedTensor,
-    PmtpDType,
-    PmtpState
+from .pmtp_types import PmtpCompactHeader, HEADER_COMPACT_SIZE
+from .pmtp_shm_bus import PmtpShmBus
+from .pmtp_stiefel import PmtpStiefelAdapter
+from .pmtp_procrustes import PmtpOrthogonalProcrustes
+from .pmtp_decoder import PmtpHypothesisEncoder, PmtpHypothesisDecoder, PmtpCausalDAGReasoner
+from .pmtp_channel import PmtpChannel
+from .pmtp_security import (
+    SAFE_WEIGHT_EXTENSIONS,
+    assert_safe_checkpoint_path,
+    build_safe_hf_load_kwargs,
+    load_numpy_safe,
+)
+from .pmtp_aladin import AladinTelepathyClient
+from .pmtp_residual_splice import (
+    ResidualStreamSpliceHook,
+    StiefelImpedanceProjector,
+    AttentionSummaryPooling,
+    stiefel_polar_retraction_order4,
+    neumaier_sum,
+)
+from .pmtp_kv_cache_bridge import (
+    PmtpSharedKVCacheBridge,
+)
+from .symplectic_minkowski import (
+    neumaier_norm,
+    neumaier_minkowski_inner_product,
+    dual_shear_symplectic_rotation_2d,
+    high_dim_torus_symplectic_flow,
+    exact_log_symplectic_contraction,
+    minkowski_hyperbolic_retraction,
+    build_canonical_symplectic_matrix,
+    compute_orthogonality_defect,
+    compute_symplectic_defect,
+    unitary_symplectic_stiefel_evaluation,
 )
 
-# 1. Neumaier Compensated Norm (FP64 drift <= 1e-15)
-def neumaier_norm(vec):
-    sum_val = 0.0
-    c = 0.0
-    arr = np.asarray(vec).ravel()
-    for x in arr:
-        val = float(x * x)
-        t = sum_val + val
-        if abs(sum_val) >= abs(val):
-            c += (sum_val - t) + val
-        else:
-            c += (val - t) + sum_val
-        sum_val = t
-    return np.sqrt(sum_val + c)
+# Alias ergonómicos para desarrolladores
+StiefelAdapter = PmtpStiefelAdapter
+ProcrustesAligner = PmtpOrthogonalProcrustes
+PmtpProcrustesAligner = PmtpOrthogonalProcrustes
 
-# 2. Native Rust Newton-Schulz Order-5 Stiefel Retraction
-_rust_lib = None
-_dir = os.path.dirname(os.path.abspath(__file__))
-_rust_dll_path = os.path.join(_dir, "pmtp_kernel_rust.dll")
-if os.path.exists(_rust_dll_path):
-    try:
-        _rust_lib = ctypes.CDLL(_rust_dll_path)
-        _rust_fn = _rust_lib.rust_newton_schulz_ord5_retract
-        _rust_fn.argtypes = [
-            ctypes.POINTER(ctypes.c_double),
-            ctypes.c_size_t,
-            ctypes.c_size_t,
-            ctypes.c_size_t,
-            ctypes.c_size_t,
-            ctypes.c_double,
-            ctypes.POINTER(ctypes.c_double),
-        ]
-        _rust_fn.restype = ctypes.c_int
-    except Exception:
-        _rust_lib = None
-
-def rust_stiefel_retract(mat: np.ndarray, max_iters: int = 20, tol: float = 1e-12):
-    """Retracts rectangular matrix to Stiefel manifold St(k, n) using native Rust Newton-Schulz."""
-    if _rust_lib is None:
-        raise RuntimeError("Rust native kernel (pmtp_kernel_rust.dll) not loaded")
-    mat_f64 = np.ascontiguousarray(mat, dtype=np.float64)
-    rows, cols = mat_f64.shape
-    flat = mat_f64.ravel()
-    ptr = flat.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-    out_defect = ctypes.c_double(0.0)
-    rc = _rust_lib.rust_newton_schulz_ord5_retract(
-        ptr, len(flat), rows, cols, max_iters, tol, ctypes.byref(out_defect)
-    )
-    if rc != 0:
-        raise RuntimeError(f"Rust Newton-Schulz retraction failed with code {rc}")
-    return flat.reshape(rows, cols), out_defect.value
-
-HEADER_SIZE = PmtpShmBus.HEADER_SIZE
-
-from .pmtp_node_client import AladinBridgeClient, AladinTelepathyClient
-
+__version__ = "1.0.0"
 __all__ = [
-    "PmtpShmBus",
     "PmtpCompactHeader",
-    "PmtpLeasedTensor",
-    "PmtpDType",
-    "PmtpState",
-    "HEADER_SIZE",
-    "neumaier_norm",
-    "rust_stiefel_retract",
-    "AladinBridgeClient", "AladinTelepathyClient",
+    "HEADER_COMPACT_SIZE",
+    "PmtpShmBus",
+    "PmtpChannel",
+    "PmtpStiefelAdapter",
+    "StiefelAdapter",
+    "PmtpOrthogonalProcrustes",
+    "ProcrustesAligner",
+    "PmtpProcrustesAligner",
+    "PmtpHypothesisEncoder",
+    "PmtpHypothesisDecoder",
+    "PmtpCausalDAGReasoner",
+    "SAFE_WEIGHT_EXTENSIONS",
+    "assert_safe_checkpoint_path",
+    "build_safe_hf_load_kwargs",
+    "load_numpy_safe",
+    "AladinTelepathyClient",
+    "ResidualStreamSpliceHook",
+    "StiefelImpedanceProjector",
+    "AttentionSummaryPooling",
+    "PmtpSharedKVCacheBridge",
+    "stiefel_polar_retraction_order4",
+    "neumaier_sum",
 ]
-
