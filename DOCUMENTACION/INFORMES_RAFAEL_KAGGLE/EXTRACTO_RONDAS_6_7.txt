@@ -1,0 +1,166 @@
+
+--- PÁGINA 1 ---
+POLYDIM / EinsofOS — Informe de las 
+rondas 6 y 7 — 20-11-2026
+Resumen
+Conclusión para Ariel: la intuición del ahorro latente es correcta y el estado del arte la
+confirma (LatentMAS). El camino es adoptar LatentMAS o C2C como base, calcular
+cualquier mapa entre modelos desde los modelos (no al azar) y medir siempre con el
+control X.
+Pregunta Ronda Respuesta medida
+¿Pasar estado latente entre agentes
+ahorra tokens?
+7 Sí: −73 % (GSM8K) y −76 % (MBPP+)
+de tokens generados contra el equipo
+que se pasa texto, y 2,3 veces más
+rápido. Lo logra LatentMAS, un método
+público
+¿Acierta igual? 7 No. El latente acertó menos que el texto
+(26 contra 28 y 13 contra 19) y que una
+sola llamada directa
+¿Viaja información de la pregunta por el
+canal latente?
+7 No se ve: con la memoria de otra
+pregunta acierta lo mismo (control X)
+¿El código de Polydim produce ese
+ahorro?
+6 y 7 No. Su proyector de Stiefel es una
+matriz al azar; su "modo C" es una
+llamada de texto con otro prompt;
+MATHESIS devuelve el vector inicial
+¿Existe la batería de "10 tareas
+complejas"?
+6 No: el documento nunca se subió a
+ningún repositorio
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 1 of 6
+--- PÁGINA 2 ---
+Parte 1 — Ronda 7: la idea de Ariel con el 
+estado del arte
+1. Qué dice Ariel
+En tareas complejas de varias etapas, los agentes que se pasan texto explotan en
+tokens.
+Pasar estado latente ("Ghost", KV compartido, proyector de Stiefel) ahorraría 75-85
+% de tokens con igual o mejor acierto (correos del 19 y 20-11).
+2. Qué dice el estado del arte
+LatentMAS — https://arxiv.org/abs/2511.20639, código https://github.com/Gen-
+Verse/LatentMAS. Mismo modelo, sin entrenamiento; cada agente piensa en pasos
+latentes y pasa su memoria KV al siguiente; solo el último escribe texto. Publica −70,8
+% (secuencial) y −83,7 % (jerárquico) de tokens de salida, ~4× más rápido, +2,8 % de
+acierto promedio; no uniforme (Qwen3-4B en GSM8K: 89,8 % texto contra 88,2 %
+latente).
+C2C — https://arxiv.org/abs/2510.03215 (modelos distintos, "fuser" entrenado).
+KVComm — https://arxiv.org/abs/2510.03346.
+Comunicación por activaciones (Ramesh & Li) — https://arxiv.org/abs/2501.14082.
+ThoughtComm — https://arxiv.org/abs/2510.20733; Interlat —
+https://arxiv.org/abs/2511.09149 (requiere entrenamiento).
+Auditoría causal 2026 — https://arxiv.org/abs/2607.26773: buena parte de la ganancia
+de estos relevos aparece aunque el mensaje venga de otra pregunta.
+StateBridge — https://arxiv.org/abs/2608.13317: mapa ortogonal calculado entre
+modelos.
+Ningún método del estado del arte usa un proyector de Stiefel al azar.
+3. Qué hay de verdad en el código de Polydim (143 documentos 
+revisados)
+Proyector de Stiefel: matriz ortogonal al azar (semilla fija) + LayerNorm sin entrenar;
+nunca se ajusta a ningún modelo.
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 2 of 6
+--- PÁGINA 3 ---
+ResidualStreamSpliceHook: un hook de PyTorch real.
+Pilot-20, "modo C" (75 %, −73,6 %): una sola llamada de texto con otro prompt; el
+vector de la memoria compartida no llega al modelo. El −73,6 % es 1 llamada contra 3.
+"164 tareas": no llama a ningún modelo. bridge_kv_cache : no toca un KV real.
+einsof2: modelos de Ollama con un prompt de sistema. Ghost: instrucciones para un
+asistente, no un canal entre modelos.
+4. Qué construimos
+Kaggle, 2× T4, Qwen/Qwen3-4B  fp16, decodificación determinista, hasta 2048 tokens
+por agente, 40 pasos latentes, 30 problemas por benchmark: GSM8K (matemática) y
+MBPP+ (código con tests).
+Código oficial de LatentMAS, adaptado a T4 (fp16, salida determinista, relleno a la
+izquierda, arreglo del traspaso KV).
+Brazos: D una llamada directa · A equipo de 4 agentes en texto · L el mismo equipo en
+latente · X control: L con la memoria de otra pregunta · P L con el proyector de Stiefel
+de Polydim.
+5. Resultados medidos
+GSM8K (30 problemas)
+Brazo Aciertos Tokens generados Tiempo
+D 29/30 26 631 804 s
+A 28/30 56 454 1 964 s
+L 26/30 15 169 843 s
+X 26/30 16 310 873 s
+P 28/30 17 278 846 s
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 3 of 6
+--- PÁGINA 4 ---
+MBPP+ (los 22 problemas que completaron todos los brazos)
+El brazo A se quedó sin memoria de GPU en 2 lotes de MBPP+; por eso se compara sobre
+los 22 comunes.
+L contra A: −73 % de tokens generados en GSM8K (−82 % de entrada, 2,3× más
+rápido) y −76 % en MBPP+.
+L contra X: en GSM8K cada uno acierta 2 que el otro falla; en MBPP+, 6 contra 5. No se
+ve información propia de la pregunta en el canal latente.
+L contra A en aciertos: GSM8K A acierta 2 que L no; MBPP+ A acierta 7 que L no.
+6. Conclusiones
+Sí: el ahorro de tokens que anticipó Ariel existe, y lo da LatentMAS.
+No en acierto: el latente acertó menos que el texto y que la llamada directa; en MBPP+
+la diferencia es clara.
+El proyector de Stiefel de Polydim no rompe nada, pero tampoco mejora.
+Ningún ahorro proviene del código de Polydim.
+Límites: 30 problemas, un modelo de 4B, fp16 en T4, una sola corrida.
+Brazo Aciertos Tokens generados
+D 14/22 29 337
+A 19/22 63 208
+L 13/22 15 116
+X 13/22 15 888
+P 12/22 22 413
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 4 of 6
+--- PÁGINA 5 ---
+Parte 2 — Ronda 6: MATHESIS y las "10 
+tareas complejas"
+1. Las "10 tareas complejas"
+El documento docs/BENCHMARK_10_TAREAS_COMPLEJAS_KAGGLE.md  da 404 en todos los
+repositorios del autor y la API de GitHub no tiene ningún commit con esa ruta. Usamos las
+10 tareas "Shannon DPI & Stiefel" de su notebook, que traen su respuesta esperada.
+Varias tareas regalan la respuesta en el enunciado o preguntan por detalles del propio
+protocolo.
+2. MATHESIS contra Python
+El compilador sí compila y corre (0,13 s, ejecutable de 8,8 KB, código de salida 0, 0,48
+ms por corrida).
+Lo que hace de verdad: las 3 "rotaciones" son el mismo vector (ignora THETA );
+"Lyapunov" es un promedio normalizado; la "retracción polar" es Gram-Schmidt sobre
+un vector; la salida es un texto fijo.
+El resultado es igual al vector inicial (diferencia 1,4e-17). Un consenso real con
+retracción polar (numpy, 12 líneas) da otro vector: diferencia 0,0023.
+Tokens: el script .mth ocupa 646; el Python que escribió el modelo, 128, con el mismo
+resultado; la referencia numpy real, 208.
+Modo Aciertos Tokens de salida
+D (una llamada) 6/10 1 298
+A (3 pasos de texto) 7/10 9 863 (7,6×)
+"Modo Polydim" — no llama a ningún modelo; el ahorro declarado es
+una constante en el código
+Lo que dicen Lo que medimos
+Consenso de Lyapunov de 3
+rotaciones
+Promedio de vectores fijos; devuelve el vector
+inicial
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 5 of 6
+--- PÁGINA 6 ---
+Reproducibilidad
+Todo en Kaggle con una sola cuenta, una corrida detrás de otra, cero dólares; nada
+instalado en nuestra infraestructura.
+Kernels: ronda 6 cw-polydim-r6-20261120-135157  y cw-polydim-r6-dump-
+20261120-140734 ; ronda 7 cw-polydim-r7-20261120-151330 .
+Código de terceros: commit 47eefb7  de polydim-suite y LatentMAS commit
+9a9e4d3 .
+Kernels e informes redactados por gpt-oss-120b  y gemma-4-31b-it ; estado del arte con
+fuentes primarias; Claude escribió las especificaciones y verificó cada número contra los
+resultados. Revisión de datos: llama-3.3-70b  aprobó ambas rondas.
+Lo que dicen Lo que medimos
+Retracción polar Gram-Schmidt
+"Más de 95 % de ahorro contra
+Python"
+.mth 646 tokens contra 128 del Python
+POLYDIM / EinsofOS — Informe de las rondas 6 y 7 — 20-11-2026
+Page 6 of 6
